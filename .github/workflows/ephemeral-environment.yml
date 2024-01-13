@@ -5,7 +5,7 @@ on:
     types: [opened, reopened, synchronize, closed]
 
 env:
-  GITHUB_REPOSITORY_NAME: 'imeneses-react'
+  GITHUB_REPOSITORY_NAME: ${{ github.repository_owner }}-react
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   GITHUB_WORKSPACE: ${{ github.workspace }}
   GITHUB_PR_NUMBER: ${{ github.event.number }}
@@ -33,6 +33,7 @@ jobs:
          echo "::set-output name=image_tag::${{ env.IMAGE_TAG }}"
          echo "::set-output name=image_tag::${{ env.APP_NAME }}"
   manage-ephemeral-environment:
+    needs: [build-docker-image]
     runs-on: ubuntu-latest
     steps:
       - run: git config --global --add safe.directory '*'
@@ -44,7 +45,7 @@ jobs:
   
   deploy-application:
     if: ${{ github.event.action != 'closed' }}
-    needs: [manage-ephemeral-environment]
+    needs: [build-docker-image, manage-ephemeral-environment]
     runs-on: ubuntu-latest
     steps:
       - run: git config --global --add safe.directory '*'
@@ -53,6 +54,6 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: 'imeneses-react-pr-4'
+          heroku_app_name: ${{ env.APP_NAME }}
           heroku_email: 'luismenesesep@gmail.com'
 
