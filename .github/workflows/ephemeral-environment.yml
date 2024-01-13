@@ -11,6 +11,10 @@ env:
   GITHUB_PR_NUMBER: ${{ github.event.number }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+permissions:
+  contents: write
+  issues: write
+
 jobs:
   build-docker-image:
     runs-on: ubuntu-latest
