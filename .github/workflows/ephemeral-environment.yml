@@ -9,6 +9,7 @@ env:
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   GITHUB_WORKSPACE: ${{ github.workspace }}
   GITHUB_PR_NUMBER: ${{ github.event.number }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build-docker-image:
@@ -78,12 +79,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: git config --global --add safe.directory '*'
-      - uses: actions/checkout@v2
       - name: Comment Deployment URL on PR
-        uses: peter-evans/create-or-update-comment@v3
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            New version deployed: ${{ needs.deploy-application.outputs.app_url }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_BODY: 'New version deployed: ${{ needs.deploy-application.outputs.app_url }}'
+        run: |
+          PR_NUMBER=${{ github.event.number }}
+          API_URL=https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/comments
+          DATA=$(printf '{"body": "%s"}' "$COMMENT_BODY")
+          
+          curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+               -H "Accept: application/vnd.github.v3+json" \
+               -H "Content-Type: application/json" \
+               -d "$DATA" \
+               $API_URL
