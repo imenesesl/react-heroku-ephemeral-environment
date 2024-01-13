@@ -51,7 +51,7 @@ jobs:
 
   deploy-application:
     if: ${{ github.event.action != 'closed' }}
-    needs: [manage-ephemeral-environment]
+    needs: [build-docker-image, manage-ephemeral-environment]
     runs-on: ubuntu-latest
     outputs:
       app_url: ${{ steps.set_output.outputs.app_url }}
@@ -76,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Comment Deployment URL on PR
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v3
         with:
           issue-number: ${{ github.event.number }}
           body: |
