@@ -1,0 +1,50 @@
+name: Ephemeral Environment
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  pull_request_closed:
+    types: [closed]
+
+jobs:
+  build-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Dockerfile and scripts
+        uses: actions/checkout@v2
+        with:
+          repository: 'imenesesl/heroku-ephemeral-environment'
+          path: 'docker'
+
+      - name: Build Docker image
+        run: |
+          IMAGE_TAG="${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}"
+          docker build -t $IMAGE_TAG ./docker
+
+  setup-ephemeral-environment:
+    needs: build-docker-image
+    runs-on: ubuntu-latest
+    container: 
+      image: ${{ env.IMAGE_TAG }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Create Ephemeral Environment
+      run: create
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        GITHUB_REPOSITORY_NAME: ${{ github.repository }}
+        GITHUB_PR_NUMBER: ${{ github.event.number }}
+
+  destroy-ephemeral-environment:
+    needs: build-docker-image
+    runs-on: ubuntu-latest
+    container: 
+      image: ${{ env.IMAGE_TAG }}
+    steps:
+    - name: Destroy Ephemeral Environment
+      run: destroy
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        GITHUB_REPOSITORY_NAME: ${{ github.repository }}
+        GITHUB_PR_NUMBER: ${{ github.event.number }}
