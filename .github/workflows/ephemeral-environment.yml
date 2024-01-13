@@ -7,6 +7,8 @@ on:
 env:
   GITHUB_REPOSITORY_NAME: 'imeneses-react'
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+  GITHUB_WORKSPACE: ${{ github.workspace }}
+  GITHUB_PR_NUMBER: ${{ github.event.number }}
 
 jobs:
   build-docker-image:
@@ -29,6 +31,15 @@ jobs:
         uses: imenesesl/heroku-ephemeral-environment@main
         with: 
           args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
-        env:
-          GITHUB_PR_NUMBER: ${{ github.event.number }}
-          IMAGE_TAG: ${{ needs.build-docker-image.outputs.image_tag }}
+  
+  deploy-application:
+    if: ${{ github.event.action != 'closed' }}
+    needs: [manage-ephemeral-environment]
+    runs-on: ubuntu-latest
+    steps:
+      - run: git config --global --add safe.directory '*'
+      - uses: actions/checkout@v2
+      - name: Deploy Application
+        uses: imenesesl/heroku-ephemeral-environment@main
+        with:
+          args: 'deploy'
