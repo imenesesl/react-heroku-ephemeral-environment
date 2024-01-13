@@ -16,6 +16,8 @@ jobs:
     if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Disable Git ownership check
+        run: git config --global --add safe.directory '*'
       - name: Create Ephemeral Environment
         uses: actions/checkout@v2
       - uses: imenesesl/heroku-ephemeral-environment@main
@@ -30,6 +32,8 @@ jobs:
     if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Disable Git ownership check
+        run: git config --global --add safe.directory '*'
       - name: Destroy Ephemeral Environment
         uses: actions/checkout@v2
       - uses: imenesesl/heroku-ephemeral-environment@main
