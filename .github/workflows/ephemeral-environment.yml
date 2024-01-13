@@ -16,8 +16,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: 'imenesesl/heroku-ephemeral-environment'
-          path: 'docker'
+          repository: "imenesesl/heroku-ephemeral-environment"
+          path: "docker"
       - name: Creating GITHUB_ENV
         run: |
           IMAGE_TAG="${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}"
@@ -30,8 +30,8 @@ jobs:
       - name: Set Output
         id: set_output
         run: |
-         echo "::set-output name=image_tag::${{ env.IMAGE_TAG }}"
-         echo "::set-output name=image_tag::${{ env.APP_NAME }}"
+          echo "::set-output name=image_tag::${{ env.IMAGE_TAG }}"
+          echo "::set-output name=image_tag::${{ env.APP_NAME }}"
   manage-ephemeral-environment:
     needs: [build-docker-image]
     runs-on: ubuntu-latest
@@ -40,9 +40,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Manage Ephemeral Environment
         uses: imenesesl/heroku-ephemeral-environment@main
-        with: 
+        with:
           args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
-  
+
   deploy-application:
     if: ${{ github.event.action != 'closed' }}
     needs: [build-docker-image, manage-ephemeral-environment]
@@ -54,6 +54,11 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ env.APP_NAME }}
-          heroku_email: 'luismenesesep@gmail.com'
-
+          heroku_app_name: ${{ needs.build-docker-image.outputs.app_name }}
+          heroku_email: "luismenesesep@gmail.com"
+      - name: Get Deployment URL
+        id: get_url
+        run: |
+          APP_URL=$(heroku apps:info -a ${{ needs.build-docker-image.outputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
+          echo "Deployment URL is $APP_URL"
+          echo "::set-output name=app_url::$APP_URL"
