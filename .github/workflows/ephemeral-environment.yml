@@ -21,7 +21,6 @@ jobs:
           docker build -t $IMAGE_TAG ./docker
 
   manage-ephemeral-environment:
-    needs: build-docker-image
     runs-on: ubuntu-latest
     steps:
       - run: git config --global --add safe.directory '*'
