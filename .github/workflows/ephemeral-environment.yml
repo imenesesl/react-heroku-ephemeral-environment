@@ -9,9 +9,8 @@ env:
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   GITHUB_WORKSPACE: ${{ github.workspace }}
   GITHUB_PR_NUMBER: ${{ github.event.number }}
-  
-jobs:
 
+jobs:
   build-docker-image:
     runs-on: ubuntu-latest
     outputs:
@@ -52,8 +51,10 @@ jobs:
 
   deploy-application:
     if: ${{ github.event.action != 'closed' }}
-    needs: [build-docker-image, manage-ephemeral-environment]
+    needs: [manage-ephemeral-environment]
     runs-on: ubuntu-latest
+    outputs:
+      app_url: ${{ steps.set_output.outputs.app_url }}
     steps:
       - run: git config --global --add safe.directory '*'
       - uses: actions/checkout@v2
@@ -69,3 +70,16 @@ jobs:
           APP_URL=$(heroku apps:info -a ${{ needs.build-docker-image.outputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
           echo "Deployment URL is $APP_URL"
           echo "::set-output name=app_url::$APP_URL"
+  comment-url:
+    if: ${{ github.event.action != 'closed' }}
+    needs: [deploy-application]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment Deployment URL on PR
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.number }}
+          body: |
+            New version deployed: ${{ needs.deploy-application.steps.get_url.outputs.app_url }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
