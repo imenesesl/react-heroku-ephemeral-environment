@@ -38,6 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: git config --global --add safe.directory '*'
+      - uses: actions/checkout@v2
       - name: Deploy Application
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
