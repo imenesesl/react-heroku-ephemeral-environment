@@ -4,49 +4,31 @@ on:
   pull_request:
     types: [opened, reopened, synchronize, closed]
 
+env:
+  GITHUB_REPOSITORY_NAME: 'imeneses-react'
+  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
 jobs:
   build-docker-image:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Dockerfile and scripts
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           repository: 'imenesesl/heroku-ephemeral-environment'
           path: 'docker'
-
-      - name: Build Docker image
-        run: |
+      - run: |
           IMAGE_TAG="${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}"
           docker build -t $IMAGE_TAG ./docker
 
-  setup-ephemeral-environment:
-    if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
+  manage-ephemeral-environment:
     runs-on: ubuntu-latest
     steps:
-      - name: Disable Git ownership check
-        run: git config --global --add safe.directory '*'
-
-      - name: Create Ephemeral Environment
+      - run: git config --global --add safe.directory '*'
+      - uses: actions/checkout@v2
+      - name: Manage Ephemeral Environment
         uses: imenesesl/heroku-ephemeral-environment@main
         with: 
-            args: create
+          args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
         env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          GITHUB_REPOSITORY_NAME: 'imeneses-react'
           GITHUB_PR_NUMBER: ${{ github.event.number }}
-
-  destroy-ephemeral-environment:
-    if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Disable Git ownership check
-        run: git config --global --add safe.directory '*'
-
-      - name: Destroy Ephemeral Environment
-        uses: imenesesl/heroku-ephemeral-environment@main
-        with:
-            args: destroy
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          GITHUB_REPOSITORY_NAME: 'imeneses-react'
-          GITHUB_PR_NUMBER: ${{ github.event.number }}
+          IMAGE_TAG: ${{ needs.build-docker-image.outputs.image_tag }}
