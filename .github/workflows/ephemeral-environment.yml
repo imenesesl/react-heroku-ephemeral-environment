@@ -18,14 +18,20 @@ jobs:
         with:
           repository: 'imenesesl/heroku-ephemeral-environment'
           path: 'docker'
-      - run: |
+      - name: Creating GITHUB_ENV
+        run: |
           IMAGE_TAG="${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}"
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
           docker build -t $IMAGE_TAG ./docker
-      - name: Set output
+      - name: Creating APP_NAME
+        run: |
+          APP_NAME="${{ env.GITHUB_REPOSITORY_NAME }}-pr-${{ env.GITHUB_PR_NUMBER }}"
+          echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
+      - name: Set Output
         id: set_output
-        run: echo "::set-output name=image_tag::${{ env.IMAGE_TAG }}"
-
+        run: |
+         echo "::set-output name=image_tag::${{ env.IMAGE_TAG }}"
+         echo "::set-output name=image_tag::${{ env.APP_NAME }}"
   manage-ephemeral-environment:
     runs-on: ubuntu-latest
     steps:
