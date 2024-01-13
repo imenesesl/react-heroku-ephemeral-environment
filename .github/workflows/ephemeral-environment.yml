@@ -9,7 +9,7 @@ env:
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   GITHUB_WORKSPACE: ${{ github.workspace }}
   GITHUB_PR_NUMBER: ${{ github.event.number }}
-
+  
 jobs:
 
   build-docker-image:
@@ -47,6 +47,8 @@ jobs:
         uses: imenesesl/heroku-ephemeral-environment@main
         with:
           args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
+        env:
+          APP_NAME: ${{ needs.build-docker-image.outputs.app_name }}
 
   deploy-application:
     if: ${{ github.event.action != 'closed' }}
