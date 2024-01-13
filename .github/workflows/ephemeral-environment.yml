@@ -69,7 +69,8 @@ jobs:
         run: |
           APP_URL=$(heroku apps:info -a ${{ needs.build-docker-image.outputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
           echo "Deployment URL is $APP_URL"
-          echo "::set-output name=app_url::$APP_URL"
+          echo "APP_URL=$APP_URL" >> $GITHUB_ENV
+          echo "::set-output name=app_url::${{ env.APP_URL }}"
   
   comment-url:
     if: ${{ github.event.action != 'closed' }}
