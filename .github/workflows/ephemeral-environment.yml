@@ -7,44 +7,51 @@ on:
 jobs:
   build-docker-image:
     runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.set_output.outputs.image_tag }}
     steps:
       - name: Checkout Dockerfile and scripts
         uses: actions/checkout@v2
         with:
-          repository: 'imenesesl/heroku-ephemeral-environment'
-          path: 'docker'
+          repository: "imenesesl/heroku-ephemeral-environment"
+          path: "docker"
 
       - name: Build Docker image
         run: |
           IMAGE_TAG="${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}"
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
           docker build -t $IMAGE_TAG ./docker
+
+      - name: Set output
+        id: set_output
+        run: echo "::set-output name=image_tag::${{ env.IMAGE_TAG }}"
 
   setup-ephemeral-environment:
     if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     needs: build-docker-image
     runs-on: ubuntu-latest
-    container: 
-      image: ${{ env.IMAGE_TAG }}
+    container:
+      image: ${{ needs.build-docker-image.outputs.image_tag }}
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Create Ephemeral Environment
-      run: create
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        GITHUB_REPOSITORY_NAME: ${{ github.repository }}
-        GITHUB_PR_NUMBER: ${{ github.event.number }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Ephemeral Environment
+        run: create
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          GITHUB_REPOSITORY_NAME: ${{ github.repository }}
+          GITHUB_PR_NUMBER: ${{ github.event.number }}
 
   destroy-ephemeral-environment:
     if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' }}
     needs: build-docker-image
     runs-on: ubuntu-latest
-    container: 
-      image: ${{ env.IMAGE_TAG }}
+    container:
+      image: ${{ needs.build-docker-image.outputs.image_tag }}
     steps:
-    - name: Destroy Ephemeral Environment
-      run: destroy
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        GITHUB_REPOSITORY_NAME: ${{ github.repository }}
-        GITHUB_PR_NUMBER: ${{ github.event.number }}
+      - name: Destroy Ephemeral Environment
+        run: destroy
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          GITHUB_REPOSITORY_NAME: ${{ github.repository }}
+          GITHUB_PR_NUMBER: ${{ github.event.number }}
