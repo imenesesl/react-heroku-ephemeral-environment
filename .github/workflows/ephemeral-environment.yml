@@ -5,36 +5,54 @@ on:
     types: [opened, reopened, synchronize, closed]
 
 env:
-  GITHUB_REPOSITORY_NAME: 'imeneses-react'
+  GITHUB_REPOSITORY_NAME: ${{ github.repository_owner }}-react
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   GITHUB_WORKSPACE: ${{ github.workspace }}
   GITHUB_PR_NUMBER: ${{ github.event.number }}
-
+  
 jobs:
+
   build-docker-image:
     runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.set_output.outputs.image_tag }}
+      app_name: ${{ steps.set_output.outputs.app_name }}
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: 'imenesesl/heroku-ephemeral-environment'
-          path: 'docker'
-      - run: |
+          repository: "imenesesl/heroku-ephemeral-environment"
+          path: "docker"
+      - name: Creating GITHUB_ENV
+        run: |
           IMAGE_TAG="${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}"
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
           docker build -t $IMAGE_TAG ./docker
+      - name: Creating APP_NAME
+        run: |
+          APP_NAME="${{ env.GITHUB_REPOSITORY_NAME }}-pr-${{ env.GITHUB_PR_NUMBER }}"
+          echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
+      - name: Set Output
+        id: set_output
+        run: |
+          echo "::set-output name=image_tag::${{ env.IMAGE_TAG }}"
+          echo "::set-output name=app_name::${{ env.APP_NAME }}"
 
   manage-ephemeral-environment:
+    needs: [build-docker-image]
     runs-on: ubuntu-latest
     steps:
       - run: git config --global --add safe.directory '*'
       - uses: actions/checkout@v2
       - name: Manage Ephemeral Environment
         uses: imenesesl/heroku-ephemeral-environment@main
-        with: 
+        with:
           args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
-  
+        env:
+          APP_NAME: ${{ needs.build-docker-image.outputs.app_name }}
+
   deploy-application:
     if: ${{ github.event.action != 'closed' }}
-    needs: [manage-ephemeral-environment]
+    needs: [build-docker-image, manage-ephemeral-environment]
     runs-on: ubuntu-latest
     steps:
       - run: git config --global --add safe.directory '*'
@@ -43,6 +61,11 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: 'imeneses-react-pr-4'
-          heroku_email: 'luismenesesep@gmail.com'
-
+          heroku_app_name: ${{ needs.build-docker-image.outputs.app_name }}
+          heroku_email: "luismenesesep@gmail.com"
+      - name: Get Deployment URL
+        id: get_url
+        run: |
+          APP_URL=$(heroku apps:info -a ${{ needs.build-docker-image.outputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
+          echo "Deployment URL is $APP_URL"
+          echo "::set-output name=app_url::$APP_URL"
