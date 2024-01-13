@@ -79,8 +79,10 @@ jobs:
       - run: git config --global --add safe.directory '*'
       - uses: actions/checkout@v2
       - name: Comment Deployment URL on PR
-        uses: sandeshjangam/comment-actions@v1
+        uses: peter-evans/create-or-update-comment@v3
         with:
-          type: "create"
-          number: ${{ github.event.pull_request.number }}
-          body: "New version deployed: ${{ needs.deploy-application.steps.get_url.outputs.app_url }}"
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            New version deployed: ${{ needs.deploy-application.steps.get_url.outputs.app_url }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
