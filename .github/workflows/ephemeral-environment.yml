@@ -83,13 +83,7 @@ jobs:
     steps:
       - run: git config --global --add safe.directory '*'
       - name: Comment Deployment URL on PR
-        env:
-          COMMENT_BODY: "New version deployed: ${{ needs.deploy-application.outputs.app_url }}"
         run: |
-          PR_NUMBER=${{ github.event.number }}
-          API_URL=https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/comments
-          DATA=$(printf '{"body": "%s"}' "$COMMENT_BODY")
-
           curl -L \
             -X POST \
             -H "Accept: application/vnd.github+json" \
