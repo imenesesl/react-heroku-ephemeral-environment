@@ -21,30 +21,32 @@ jobs:
 
   setup-ephemeral-environment:
     if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
-    needs: build-docker-image
     runs-on: ubuntu-latest
-    container: 
-      image: ${{ env.IMAGE_TAG }}
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Create Ephemeral Environment
-      run: create
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        GITHUB_REPOSITORY_NAME: ${{ github.repository }}
-        GITHUB_PR_NUMBER: ${{ github.event.number }}
+      - name: Disable Git ownership check
+        run: git config --global --add safe.directory '*'
+
+      - name: Create Ephemeral Environment
+        uses: imenesesl/heroku-ephemeral-environment@main
+        with: 
+            args: create
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          GITHUB_REPOSITORY_NAME: 'imeneses-react'
+          GITHUB_PR_NUMBER: ${{ github.event.number }}
 
   destroy-ephemeral-environment:
     if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' }}
-    needs: build-docker-image
     runs-on: ubuntu-latest
-    container: 
-      image: ${{ env.IMAGE_TAG }}
     steps:
-    - name: Destroy Ephemeral Environment
-      run: destroy
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        GITHUB_REPOSITORY_NAME: ${{ github.repository }}
-        GITHUB_PR_NUMBER: ${{ github.event.number }}
+      - name: Disable Git ownership check
+        run: git config --global --add safe.directory '*'
+
+      - name: Destroy Ephemeral Environment
+        uses: imenesesl/heroku-ephemeral-environment@main
+        with:
+            args: destroy
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          GITHUB_REPOSITORY_NAME: 'imeneses-react'
+          GITHUB_PR_NUMBER: ${{ github.event.number }}
