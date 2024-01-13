@@ -8,9 +8,16 @@ jobs:
   build-docker-image:
     runs-on: ubuntu-latest
     steps:
-    - name: Build Docker image
-      run: |
-        IMAGE_TAG="${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}"
+      - name: Checkout Dockerfile and scripts
+        uses: actions/checkout@v2
+        with:
+          repository: 'imenesesl/heroku-ephemeral-environment'
+          path: 'docker'
+
+      - name: Build Docker image
+        run: |
+          IMAGE_TAG="${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}"
+          docker build -t $IMAGE_TAG ./docker
 
   setup-ephemeral-environment:
     if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
@@ -18,9 +25,9 @@ jobs:
     steps:
       - name: Disable Git ownership check
         run: git config --global --add safe.directory '*'
+
       - name: Create Ephemeral Environment
-        uses: actions/checkout@v2
-      - uses: imenesesl/heroku-ephemeral-environment@main
+        uses: imenesesl/heroku-ephemeral-environment@main
         with: 
             args: create
         env:
@@ -34,9 +41,9 @@ jobs:
     steps:
       - name: Disable Git ownership check
         run: git config --global --add safe.directory '*'
+
       - name: Destroy Ephemeral Environment
-        uses: actions/checkout@v2
-      - uses: imenesesl/heroku-ephemeral-environment@main
+        uses: imenesesl/heroku-ephemeral-environment@main
         with:
             args: destroy
         env:
