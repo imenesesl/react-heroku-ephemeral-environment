@@ -2,9 +2,7 @@ name: Ephemeral Environment
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
-  pull_request_closed:
-    types: [closed]
+    types: [opened, reopened, synchronize, closed]
 
 jobs:
   build-docker-image:
