@@ -11,8 +11,12 @@ env:
   GITHUB_PR_NUMBER: ${{ github.event.number }}
 
 jobs:
+
   build-docker-image:
     runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.set_output.outputs.image_tag }}
+      app_name: ${{ steps.set_output.outputs.app_name }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -32,6 +36,7 @@ jobs:
         run: |
           echo "::set-output name=image_tag::${{ env.IMAGE_TAG }}"
           echo "::set-output name=app_name::${{ env.APP_NAME }}"
+
   manage-ephemeral-environment:
     needs: [build-docker-image]
     runs-on: ubuntu-latest
