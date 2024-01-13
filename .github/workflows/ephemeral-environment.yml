@@ -25,7 +25,7 @@ jobs:
     steps:
       - run: git config --global --add safe.directory '*'
       - uses: actions/checkout@v2
-      - name: Create or Destroy Ephemeral Environment
+      - name: Manage Ephemeral Environment
         uses: imenesesl/heroku-ephemeral-environment@main
         with: 
           args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
