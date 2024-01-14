@@ -5,9 +5,10 @@ on:
     types: [opened, reopened, synchronize, closed]
 
 env:
-  GITHUB_REPOSITORY_NAME: ${{ github.repository_owner }}-react
+  EPHEMERAL_ENVIRONMENT_NAME: react-vite
+  GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+  GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}-react
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-  GITHUB_WORKSPACE: ${{ github.workspace }}
   GITHUB_PR_NUMBER: ${{ github.event.number }}
 
 permissions:
@@ -27,12 +28,12 @@ jobs:
           path: "docker"
       - name: 🔒 Creating IMAGE_TAG
         run: |
-          IMAGE_TAG="${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}"
+          IMAGE_TAG="${{ env.GITHUB_REPOSITORY_OWNER }}/${{ env.GITHUB_REPOSITORY_NAME }}:${{ github.sha }}"
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
           docker build -t $IMAGE_TAG ./docker
       - name: 🔒 Creating APP_NAME
         run: |
-          APP_NAME="${{ env.GITHUB_REPOSITORY_NAME }}-pr-${{ env.GITHUB_PR_NUMBER }}"
+          APP_NAME="${{env.EPHEMERAL_ENVIRONMENT_NAME}}-pr-${{ env.GITHUB_PR_NUMBER }}"
           echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
       - name: 🔨 Set Output
         id: set_output
@@ -63,7 +64,7 @@ jobs:
       - name: 🚀 Deploy Application
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_api_key: ${{ env.HEROKU_API_KEY }}
           heroku_app_name: ${{ needs.build-docker-image.outputs.app_name }}
           heroku_email: "luismenesesep@gmail.com"
       - name: 🔗 Get Deployment URL
