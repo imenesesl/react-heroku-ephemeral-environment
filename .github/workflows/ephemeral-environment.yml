@@ -5,39 +5,44 @@ on:
     types: [opened, reopened, synchronize, closed]
 
 env:
-  EPHEMERAL_ENVIRONMENT_NAME: react-vite
-  GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
-  GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}-react
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-  GITHUB_PR_NUMBER: ${{ github.event.number }}
 
 permissions:
   contents: write
   issues: write
 
 jobs:
-  build-docker-image:
+  set-env-variables:
     runs-on: ubuntu-latest
     outputs:
-      image_tag: ${{ env.IMAGE_TAG }}
-      app_name: ${{ env.APP_NAME }}
+      repository_owner: ${{ env.GITHUB_REPOSITORY_OWNER }}
+      repository_name: ${{ env.GITHUB_REPOSITORY_NAME }}
+      environment_name: ${{ env.EPHEMERAL_ENVIRONMENT_NAME }}
+      pr_number: ${{ env.GITHUB_PR_NUMBER }}
     steps:
-      - uses: actions/checkout@v2
-        with:
-          repository: "imenesesl/heroku-ephemeral-environment"
-          path: "docker"
-      - name: 🔒 Creating IMAGE_TAG
+      - name: 🔒 Set Env Variables
         run: |
-          IMAGE_TAG="${{ env.GITHUB_REPOSITORY_OWNER }}/${{ env.GITHUB_REPOSITORY_NAME }}:${{ github.sha }}"
-          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-          docker build -t $IMAGE_TAG ./docker
-      - name: 🔒 Creating APP_NAME
-        run: |
-          APP_NAME="${{env.EPHEMERAL_ENVIRONMENT_NAME}}-pr-${{ env.GITHUB_PR_NUMBER }}"
-          echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
+          GITHUB_REPOSITORY_OWNER="${{github.repository_owner}}"
+          GITHUB_REPOSITORY_NAME="${{github.event.repository.name}}-react"
+          EPHEMERAL_ENVIRONMENT_NAME="react-vite"
+          GITHUB_PR_NUMBER="${{github.event.number}}"
+
+          echo "GITHUB_REPOSITORY_OWNER=$GITHUB_REPOSITORY_OWNER" >> $GITHUB_ENV
+          echo "GITHUB_REPOSITORY_NAME=$GITHUB_REPOSITORY_NAME" >> $GITHUB_ENV
+          echo "EPHEMERAL_ENVIRONMENT_NAME=$EPHEMERAL_ENVIRONMENT_NAME" >> $GITHUB_ENV
+          echo "GITHUB_PR_NUMBER=$GITHUB_PR_NUMBER" >> $GITHUB_ENV
+
+  call-build-docker-image:
+    needs: [set-env-variables]
+    uses: "./build-docker-image.yml"
+    with:
+      repository_owner: ${{needs.set-env-variables.outputs.repository_owner}}
+      repository_name: ${{needs.set-env-variables.outputs.repository_name}}
+      environment_name: ${{needs.set-env-variables.outputs.environment_name}}
+      pr_number: ${{needs.set-env-variables.outputs.pr_number}}
 
   manage-ephemeral-environment:
-    needs: [build-docker-image]
+    needs: [call-build-docker-image]
     runs-on: ubuntu-latest
     steps:
       - run: git config --global --add safe.directory '*'
@@ -47,11 +52,11 @@ jobs:
         with:
           args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
         env:
-          APP_NAME: ${{ needs.build-docker-image.outputs.app_name }}
+          APP_NAME: ${{ needs.call-build-docker-image.outputs.app_name }}
 
   deploy-application:
     if: ${{ github.event.action != 'closed' }}
-    needs: [build-docker-image, manage-ephemeral-environment]
+    needs: [call-build-docker-image, manage-ephemeral-environment]
     runs-on: ubuntu-latest
     outputs:
       app_url: ${{ env.APP_URL }}
@@ -62,11 +67,11 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ env.HEROKU_API_KEY }}
-          heroku_app_name: ${{ needs.build-docker-image.outputs.app_name }}
+          heroku_app_name: ${{ needs.call-build-docker-image.outputs.app_name }}
           heroku_email: "luismenesesep@gmail.com"
       - name: 🔗 Get Deployment URL
         run: |
-          APP_URL=$(heroku apps:info -a ${{ needs.build-docker-image.outputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
+          APP_URL=$(heroku apps:info -a ${{ needs.call-build-docker-image.outputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
           echo "APP_URL=$APP_URL" >> $GITHUB_ENV
           echo "----------------------------------------"
           echo "🚀 Deployment URL is $APP_URL 🚀"
