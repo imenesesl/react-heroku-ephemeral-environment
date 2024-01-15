@@ -69,5 +69,5 @@ jobs:
           APP_URL=$(heroku apps:info -a ${{ needs.build-docker-image.outputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
           echo "APP_URL=$APP_URL" >> $GITHUB_ENV
           echo "----------------------------------------"
-          echo "🚀 Deployment URL is ${{env.APP_URL}} 🚀"
+          echo "🚀 Deployment URL is $APP_URL 🚀"
           echo "----------------------------------------"
