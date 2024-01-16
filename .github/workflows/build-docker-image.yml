@@ -8,10 +8,7 @@ on:
       repository_name:
         required: true
         type: string
-      environment_name:
-        required: true
-        type: string
-      pr_number:
+      app_name:
         required: true
         type: string
 
@@ -28,4 +25,15 @@ jobs:
           IMAGE_TAG="${{ inputs.repository_owner }}/${{ inputs.repository_name }}:${{ github.sha }}"
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
           docker build -t $IMAGE_TAG ./docker
+  manage-ephemeral-environment:
+    runs-on: ubuntu-latest
+    steps:
+      - run: git config --global --add safe.directory '*'
+      - uses: actions/checkout@v2
+      - name: 🏗️ Manage Ephemeral Environment
+        uses: imenesesl/heroku-ephemeral-environment@main
+        with:
+          args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
+        env:
+          APP_NAME: ${{ inputs.app_name }}
 

@@ -41,25 +41,11 @@ jobs:
     with:
       repository_owner: ${{needs.set-env-variables.outputs.repository_owner}}
       repository_name: ${{needs.set-env-variables.outputs.repository_name}}
-      environment_name: ${{needs.set-env-variables.outputs.environment_name}}
-      pr_number: ${{needs.set-env-variables.outputs.pr_number}}
-
-  manage-ephemeral-environment:
-    needs: [set-env-variables]
-    runs-on: ubuntu-latest
-    steps:
-      - run: git config --global --add safe.directory '*'
-      - uses: actions/checkout@v2
-      - name: 🏗️ Manage Ephemeral Environment
-        uses: imenesesl/heroku-ephemeral-environment@main
-        with:
-          args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
-        env:
-          APP_NAME: ${{ needs.set-env-variables.outputs.app_name }}
+      app_name: ${{needs.set-env-variables.outputs.app_name}}
 
   deploy-application:
     if: ${{ github.event.action != 'closed' }}
-    needs: [set-env-variables, manage-ephemeral-environment]
+    needs: [set-env-variables]
     runs-on: ubuntu-latest
     outputs:
       app_url: ${{ env.APP_URL }}
