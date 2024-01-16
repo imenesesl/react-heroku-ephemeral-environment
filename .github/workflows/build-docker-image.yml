@@ -13,7 +13,7 @@ on:
         type: string
       pr_number:
         required: true
-        type: number
+        type: string
 
 jobs:
   build-docker-image:
