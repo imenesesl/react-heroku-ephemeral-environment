@@ -46,12 +46,3 @@ yarn install
 ```bash
 yarn dev
 ```
-
-## Version Management
-- The application's versioning is managed through the `bump:version` script.
-- This script is integral to the workflow, ensuring version consistency across deployments.
-- To update the version, run:
-  ```bash
-  yarn run bump:version
-  ```
-  This script is located in `node_modules/heroku-workflow/update-version.sh` and requires the path to `package.json` as an argument.
