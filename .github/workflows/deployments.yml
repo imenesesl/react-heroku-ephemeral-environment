@@ -1,0 +1,22 @@
+name: Deployments
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types: [published]
+
+jobs:
+  staging-deployment:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - run: git config --global --add safe.directory '*'
+      - uses: actions/checkout@v2
+      - name: 🚀 Deploy Application to Staging
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: stg-react-vite
+          heroku_email: "luismenesesep@gmail.com"
