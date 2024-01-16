@@ -19,3 +19,4 @@ jobs:
       repository_name: ${{ github.event.repository.name }}
       app_name: react-vite-pr-${{ github.event.number }}
       heroku_email: "luismenesesep@gmail.com"
+      pr_number: ${{ github.event.number }}
