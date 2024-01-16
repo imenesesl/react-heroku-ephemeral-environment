@@ -1,0 +1,31 @@
+name: Update Version
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**"
+    paths:
+      - "!**.yml"
+
+jobs:
+  update-version:
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, 'Merge pull request')
+    runs-on: ubuntu-latest
+    steps:
+      - run: git config --global --add safe.directory '*'
+      - uses: actions/checkout@v2
+
+      - name: 🔃 Update
+        uses: imenesesl/heroku-workflow@main
+        with:
+          args: 'update-version ./package.json && echo "1"'
+
+      - name: 🆕 Commit and Push Version Update
+        run: |
+          git add .
+          git commit -am "bump:app-package-version"
+          git push --set-upstream origin HEAD
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
