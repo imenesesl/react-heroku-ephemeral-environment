@@ -1,4 +1,4 @@
-name: Update Version
+name: Update Package Version
 
 on:
   push:
@@ -6,29 +6,10 @@ on:
       - main
 
 jobs:
-  update-version:
-    if: github.event_name == 'push' && contains(github.event.head_commit.message, 'Merge pull request')
-    runs-on: ubuntu-latest
-    steps:
-      - run: git config --global --add safe.directory '*'
-      - name: 🤖 Git config
-        uses: actions/checkout@v2
-        with:
-          ref: main
-          token: ${{ secrets.REPO_ACCESS }}
-
-      - name: 🔃 Update Package Version
-        uses: imenesesl/heroku-workflow@main
-        with:
-          args: 'update-version'
-        env:
-          PACKAGE_JSON_PATH: "./package.json"
-          INCREMENT_TYPE: fix
-
-      - name: 🆕 Commit and Push Version Update
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add .
-          git commit -am "bump:app-package-version"
-          git push
+  update-version-workflow:
+    uses: imenesesl/heroku-workflow/.github/workflows/update-version-workflow.yml@main
+    secrets:
+      GITHUB_REPO_PAT: ${{ secrets.REPO_ACCESS }}
+    with:
+      increment_type: fix
+      package_json_path: "./package.json"
