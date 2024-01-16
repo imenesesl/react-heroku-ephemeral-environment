@@ -43,26 +43,5 @@ jobs:
       repository_name: ${{needs.set-env-variables.outputs.repository_name}}
       app_name: ${{needs.set-env-variables.outputs.app_name}}
       heroku_api_key: ${{needs.set-env-variables.outputs.heroku_api_key}}
-
-  deploy-application:
-    if: ${{ github.event.action != 'closed' }}
-    needs: [set-env-variables, call-build-docker-image]
-    runs-on: ubuntu-latest
-    outputs:
-      app_url: ${{ env.APP_URL }}
-    steps:
-      - run: git config --global --add safe.directory '*'
-      - uses: actions/checkout@v2
-      - name: 🚀 Deploy Application
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ needs.set-env-variables.outputs.app_name }}
-          heroku_email: "luismenesesep@gmail.com"
-      - name: 🔗 Get Deployment URL
-        run: |
-          APP_URL=$(heroku apps:info -a ${{ needs.set-env-variables.outputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
-          echo "APP_URL=$APP_URL" >> $GITHUB_ENV
-          echo "----------------------------------------"
-          echo "🚀 Deployment URL is $APP_URL 🚀"
-          echo "----------------------------------------"
+      heroku_email: "luismenesesep@gmail.com"
+  

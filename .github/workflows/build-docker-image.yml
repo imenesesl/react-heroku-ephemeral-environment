@@ -14,6 +14,9 @@ on:
       heroku_api_key:
         required: true
         type: string
+      heroku_email:
+        required: true
+        type: string
 
 jobs:
   build-docker-image:
@@ -40,3 +43,25 @@ jobs:
         env:
           APP_NAME: ${{ inputs.app_name }}
           HEROKU_API_KEY: ${{inputs.heroku_api_key}}
+  deploy-application:
+    if: ${{ github.event.action != 'closed' }}
+    needs: [manage-ephemeral-environment]
+    runs-on: ubuntu-latest
+    outputs:
+      app_url: ${{ env.APP_URL }}
+    steps:
+      - run: git config --global --add safe.directory '*'
+      - uses: actions/checkout@v2
+      - name: 🚀 Deploy Application
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ inputs.heroku_api_key }}
+          heroku_app_name: ${{ inputs.app_name }}
+          heroku_email: ${{ inputs.heroku_email }}
+      - name: 🔗 Get Deployment URL
+        run: |
+          APP_URL=$(heroku apps:info -a ${{ inputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
+          echo "APP_URL=$APP_URL" >> $GITHUB_ENV
+          echo "----------------------------------------"
+          echo "🚀 Deployment URL is $APP_URL 🚀"
+          echo "----------------------------------------"
