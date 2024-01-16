@@ -46,3 +46,30 @@ yarn install
 ```bash
 yarn dev
 ```
+
+## Branch Naming Convention
+
+In our development process, we follow a specific naming convention for branches to streamline version management and to clearly indicate the purpose of each branch. The prefixes used are integral to our automated versioning process.
+
+### Branch Prefixes:
+
+- `fix`: For branches containing bug fixes. If a branch is merged with this prefix, it's assumed to be a patch update.
+- `hotfix`: For urgent bug fixes that need to be deployed rapidly. Also treated as a patch update.
+- `feature`: For new features being added to the application. Merging these branches typically triggers a minor version update.
+- `feat`: An alternative to `feature`, also leading to a minor version update.
+- `core`: For significant changes that might include breaking changes. Merging a `core` branch will trigger a major version update.
+
+### Automated Version Management:
+
+Our workflow is set up to automatically update the version in the `package.json` file based on the prefix of the branch being merged into `main`. The versioning follows [Semantic Versioning](https://semver.org/) principles (major.minor.patch):
+
+- `fix`/`hotfix`: Triggers a patch version increment.
+- `feature`/`feat`: Triggers a minor version increment.
+- `core`: Triggers a major version increment.
+
+If the branch name doesn't match any of the specified prefixes, the system defaults to treating it as a `fix`, resulting in a patch version increment. This ensures that every merge into `main` is accompanied by an appropriate version update, maintaining consistency and traceability.
+
+### Example:
+
+- Merging a branch named `feature/add-new-login` will increment the minor version.
+- Merging a branch named `fix/login-bug` will increment the patch version.
