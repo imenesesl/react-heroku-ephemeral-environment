@@ -34,7 +34,7 @@ jobs:
 
   call-build-docker-image:
     needs: [set-env-variables]
-    uses: "./build-docker-image.yml"
+    uses: ./.github/workflows/build-docker-image.yml
     with:
       repository_owner: ${{needs.set-env-variables.outputs.repository_owner}}
       repository_name: ${{needs.set-env-variables.outputs.repository_name}}
