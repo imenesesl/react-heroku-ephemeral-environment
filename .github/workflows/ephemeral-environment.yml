@@ -12,10 +12,10 @@ jobs:
   ephemeral-environment-workflow:
     uses: imenesesl/heroku-workflow/.github/workflows/ephemeral-environment-workflow.yml@main
     secrets:
-      HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     with:
-      repository_owner: ${{github.repository_owner}}
-      repository_name: ${{github.event.repository.name}}
-      app_name: react-vite-pr-${{github.event.number}}
+      repository_owner: ${{ github.repository_owner }}
+      repository_name: ${{ github.event.repository.name }}
+      app_name: react-vite-pr-${{ github.event.number }}
       heroku_email: "luismenesesep@gmail.com"
-  
