@@ -20,7 +20,7 @@ jobs:
       - name: 🔃 Update
         uses: imenesesl/heroku-workflow@main
         with:
-          args: 'update-version ./package.json && echo "1"'
+          args: 'update-version ./package.json fix'
 
       - name: 🆕 Commit and Push Version Update
         run: |
