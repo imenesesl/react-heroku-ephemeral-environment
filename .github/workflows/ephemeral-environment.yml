@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   ephemeral-environment-workflow:
-    uses: imenesesl/heroku-ephemeral-environment/.github/workflows/ephemeral-environment-workflow.yml@main
+    uses: imenesesl/heroku-workflow/.github/workflows/ephemeral-environment-workflow.yml@main
     secrets:
       HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
     with:
