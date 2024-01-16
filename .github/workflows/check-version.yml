@@ -1,0 +1,11 @@
+name: Check Package Version
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-version-workflow:
+    uses: imenesesl/heroku-workflow/.github/workflows/check-version-workflow.yml@main
+    with:
+      command: "yarn bump:version"
