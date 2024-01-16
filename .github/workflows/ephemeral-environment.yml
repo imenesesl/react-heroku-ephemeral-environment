@@ -4,73 +4,18 @@ on:
   pull_request:
     types: [opened, reopened, synchronize, closed]
 
-env:
-  EPHEMERAL_ENVIRONMENT_NAME: react-vite
-  GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
-  GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}-react
-  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-  GITHUB_PR_NUMBER: ${{ github.event.number }}
-
 permissions:
   contents: write
   issues: write
 
 jobs:
-  build-docker-image:
-    runs-on: ubuntu-latest
-    outputs:
-      image_tag: ${{ steps.set_output.outputs.image_tag }}
-      app_name: ${{ steps.set_output.outputs.app_name }}
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          repository: "imenesesl/heroku-ephemeral-environment"
-          path: "docker"
-      - name: 🔒 Creating IMAGE_TAG
-        run: |
-          IMAGE_TAG="${{ env.GITHUB_REPOSITORY_OWNER }}/${{ env.GITHUB_REPOSITORY_NAME }}:${{ github.sha }}"
-          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-          docker build -t $IMAGE_TAG ./docker
-      - name: 🔒 Creating APP_NAME
-        run: |
-          APP_NAME="${{env.EPHEMERAL_ENVIRONMENT_NAME}}-pr-${{ env.GITHUB_PR_NUMBER }}"
-          echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
-      - name: 🔨 Set Output
-        id: set_output
-        run: |
-          echo "::set-output name=image_tag::${{ env.IMAGE_TAG }}"
-          echo "::set-output name=app_name::${{ env.APP_NAME }}"
-
-  manage-ephemeral-environment:
-    needs: [build-docker-image]
-    runs-on: ubuntu-latest
-    steps:
-      - run: git config --global --add safe.directory '*'
-      - uses: actions/checkout@v2
-      - name: 🏗️ Manage Ephemeral Environment
-        uses: imenesesl/heroku-ephemeral-environment@main
-        with:
-          args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
-        env:
-          APP_NAME: ${{ needs.build-docker-image.outputs.app_name }}
-
-  deploy-application:
-    if: ${{ github.event.action != 'closed' }}
-    needs: [build-docker-image, manage-ephemeral-environment]
-    runs-on: ubuntu-latest
-    steps:
-      - run: git config --global --add safe.directory '*'
-      - uses: actions/checkout@v2
-      - name: 🚀 Deploy Application
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ env.HEROKU_API_KEY }}
-          heroku_app_name: ${{ needs.build-docker-image.outputs.app_name }}
-          heroku_email: "luismenesesep@gmail.com"
-      - name: 🔗 Get Deployment URL
-        id: get_url
-        run: |
-          APP_URL=$(heroku apps:info -a ${{ needs.build-docker-image.outputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
-          echo "----------------------------------------"
-          echo "🚀 Deployment URL is $APP_URL 🚀"
-          echo "----------------------------------------"
+  call-build-docker-image:
+    uses: ./.github/workflows/build-docker-image.yml
+    secrets:
+      HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
+    with:
+      repository_owner: ${{github.repository_owner}}
+      repository_name: "${{github.event.repository.name}}-react"
+      app_name: react-vite-pr-${{github.event.number}}
+      heroku_email: "luismenesesep@gmail.com"
+  
