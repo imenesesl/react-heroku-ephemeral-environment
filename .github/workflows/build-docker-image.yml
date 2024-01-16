@@ -46,16 +46,21 @@ jobs:
           HEROKU_EMAIL: ${{inputs.heroku_email}}
   deploy-application:
     if: ${{ github.event.action != 'closed' }}
-    needs: [manage-ephemeral-environment]
+    needs: [build-docker-image, manage-ephemeral-environment]
     runs-on: ubuntu-latest
     steps:
       - run: git config --global --add safe.directory '*'
       - uses: actions/checkout@v2
       - name: 🚀 Deploy Application
-        uses: imenesesl/heroku-ephemeral-environment@main
+        uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          args: 'deploy'
-        env:
-          APP_NAME: ${{ inputs.app_name }}
-          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-          HEROKU_EMAIL: ${{inputs.heroku_email}}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ inputs.app_name }}
+          heroku_email: ${{ inputs.heroku_email }}
+      - name: 🔗 Get Deployment URL
+        id: get_url
+        run: |
+          APP_URL=$(heroku apps:info -a ${{ inputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
+          echo "----------------------------------------"
+          echo "🚀 Deployment URL is $APP_URL 🚀"
+          echo "----------------------------------------"
