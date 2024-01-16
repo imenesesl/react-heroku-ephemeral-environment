@@ -17,10 +17,13 @@ jobs:
           ref: main
           token: ${{ secrets.REPO_ACCESS }}
 
-      - name: 🔃 Update
+      - name: 🔃 Update Package Version
         uses: imenesesl/heroku-workflow@main
         with:
-          args: 'update-version ./package.json fix'
+          args: 'update-version'
+        env:
+          PACKAGE_JSON_PATH: "./package.json"
+          INCREMENT_TYPE: fix
 
       - name: 🆕 Commit and Push Version Update
         run: |
