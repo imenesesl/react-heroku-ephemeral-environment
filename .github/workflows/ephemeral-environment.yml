@@ -19,6 +19,7 @@ jobs:
       repository_name: ${{ env.GITHUB_REPOSITORY_NAME }}
       environment_name: ${{ env.EPHEMERAL_ENVIRONMENT_NAME }}
       pr_number: ${{ env.GITHUB_PR_NUMBER }}
+      app_name: ${{ env.APP_NAME }}
     steps:
       - name: 🔒 Set Env Variables
         run: |
@@ -26,11 +27,13 @@ jobs:
           GITHUB_REPOSITORY_NAME="${{github.event.repository.name}}-react"
           EPHEMERAL_ENVIRONMENT_NAME="react-vite"
           GITHUB_PR_NUMBER="${{github.event.number}}"
+          APP_NAME="$GITHUB_REPOSITORY_NAME-pr-$GITHUB_PR_NUMBER"
 
           echo "GITHUB_REPOSITORY_OWNER=$GITHUB_REPOSITORY_OWNER" >> $GITHUB_ENV
           echo "GITHUB_REPOSITORY_NAME=$GITHUB_REPOSITORY_NAME" >> $GITHUB_ENV
           echo "EPHEMERAL_ENVIRONMENT_NAME=$EPHEMERAL_ENVIRONMENT_NAME" >> $GITHUB_ENV
           echo "GITHUB_PR_NUMBER=$GITHUB_PR_NUMBER" >> $GITHUB_ENV
+          echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
 
   call-build-docker-image:
     needs: [set-env-variables]
@@ -42,7 +45,7 @@ jobs:
       pr_number: ${{needs.set-env-variables.outputs.pr_number}}
 
   manage-ephemeral-environment:
-    needs: [call-build-docker-image]
+    needs: [set-env-variables]
     runs-on: ubuntu-latest
     steps:
       - run: git config --global --add safe.directory '*'
@@ -52,11 +55,11 @@ jobs:
         with:
           args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
         env:
-          APP_NAME: ${{ needs.call-build-docker-image.outputs.app_name }}
+          APP_NAME: ${{ needs.set-env-variables.outputs.app_name }}
 
   deploy-application:
     if: ${{ github.event.action != 'closed' }}
-    needs: [call-build-docker-image, manage-ephemeral-environment]
+    needs: [set-env-variables, manage-ephemeral-environment]
     runs-on: ubuntu-latest
     outputs:
       app_url: ${{ env.APP_URL }}
@@ -67,11 +70,11 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ env.HEROKU_API_KEY }}
-          heroku_app_name: ${{ needs.call-build-docker-image.outputs.app_name }}
+          heroku_app_name: ${{ needs.set-env-variables.outputs.app_name }}
           heroku_email: "luismenesesep@gmail.com"
       - name: 🔗 Get Deployment URL
         run: |
-          APP_URL=$(heroku apps:info -a ${{ needs.call-build-docker-image.outputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
+          APP_URL=$(heroku apps:info -a ${{ needs.set-env-variables.outputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
           echo "APP_URL=$APP_URL" >> $GITHUB_ENV
           echo "----------------------------------------"
           echo "🚀 Deployment URL is $APP_URL 🚀"
