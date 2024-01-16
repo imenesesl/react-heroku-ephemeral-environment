@@ -20,6 +20,8 @@ jobs:
 
       - name: 🆕 Commit and Push Version Update
         run: |
+          git config --global user.email "luismenesesep@gmail.com"
+          git config --global user.name "${{ github.repository_owner }}"
           git add .
           git commit -am "bump:app-package-version"
           git push --set-upstream origin HEAD
