@@ -38,10 +38,11 @@ jobs:
   call-build-docker-image:
     needs: [set-env-variables]
     uses: ./.github/workflows/build-docker-image.yml
+    secrets:
+      HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
     with:
       repository_owner: ${{needs.set-env-variables.outputs.repository_owner}}
       repository_name: ${{needs.set-env-variables.outputs.repository_name}}
       app_name: ${{needs.set-env-variables.outputs.app_name}}
-      heroku_api_key: ${{needs.set-env-variables.outputs.heroku_api_key}}
       heroku_email: "luismenesesep@gmail.com"
   
