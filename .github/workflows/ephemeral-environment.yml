@@ -13,7 +13,7 @@ jobs:
     uses: imenesesl/heroku-workflow/.github/workflows/ephemeral-environment-workflow.yml@main
     secrets:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_SECRET_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     with:
       repository_owner: ${{ github.repository_owner }}
       repository_name: ${{ github.event.repository.name }}
