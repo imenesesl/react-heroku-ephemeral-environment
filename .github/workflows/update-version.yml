@@ -25,6 +25,3 @@ jobs:
           git add .
           git commit -am "bump:app-package-version"
           git push --set-upstream origin HEAD
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS }}
-
