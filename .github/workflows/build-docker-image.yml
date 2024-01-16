@@ -58,6 +58,8 @@ jobs:
           heroku_api_key: ${{ inputs.heroku_api_key }}
           heroku_app_name: ${{ inputs.app_name }}
           heroku_email: ${{ inputs.heroku_email }}
+        env: 
+          HEROKU_API_KEY: ${{inputs.heroku_api_key}}
       - name: 🔗 Get Deployment URL
         run: |
           APP_URL=$(heroku apps:info -a ${{ inputs.app_name }} | grep 'Web URL' | awk '{print $NF}')
