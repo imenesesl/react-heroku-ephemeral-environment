@@ -11,6 +11,9 @@ on:
       app_name:
         required: true
         type: string
+      heroku_api_key:
+        required: true
+        type: string
 
 jobs:
   build-docker-image:
@@ -36,4 +39,4 @@ jobs:
           args: ${{ github.event.action == 'closed' && 'destroy' || 'create' }}
         env:
           APP_NAME: ${{ inputs.app_name }}
-
+          HEROKU_API_KEY: ${{inputs.heroku_api_key}}

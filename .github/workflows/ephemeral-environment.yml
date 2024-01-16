@@ -4,9 +4,6 @@ on:
   pull_request:
     types: [opened, reopened, synchronize, closed]
 
-env:
-  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-
 permissions:
   contents: write
   issues: write
@@ -20,6 +17,7 @@ jobs:
       environment_name: ${{ env.EPHEMERAL_ENVIRONMENT_NAME }}
       pr_number: ${{ env.GITHUB_PR_NUMBER }}
       app_name: ${{ env.APP_NAME }}
+      heroku_api_key: ${{env.HEROKU_API_KEY}}
     steps:
       - name: 🔒 Set Env Variables
         run: |
@@ -28,12 +26,14 @@ jobs:
           EPHEMERAL_ENVIRONMENT_NAME="react-vite"
           GITHUB_PR_NUMBER="${{github.event.number}}"
           APP_NAME="$GITHUB_REPOSITORY_OWNER-pr-$GITHUB_PR_NUMBER"
+          HEROKU_API_KEY="${{secrets.HEROKU_API_KEY}}"
 
           echo "GITHUB_REPOSITORY_OWNER=$GITHUB_REPOSITORY_OWNER" >> $GITHUB_ENV
           echo "GITHUB_REPOSITORY_NAME=$GITHUB_REPOSITORY_NAME" >> $GITHUB_ENV
           echo "EPHEMERAL_ENVIRONMENT_NAME=$EPHEMERAL_ENVIRONMENT_NAME" >> $GITHUB_ENV
           echo "GITHUB_PR_NUMBER=$GITHUB_PR_NUMBER" >> $GITHUB_ENV
           echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
+          echo "HEROKU_API_KEY=$HEROKU_API_KEY" >> $GITHUB_ENV
 
   call-build-docker-image:
     needs: [set-env-variables]
@@ -42,10 +42,11 @@ jobs:
       repository_owner: ${{needs.set-env-variables.outputs.repository_owner}}
       repository_name: ${{needs.set-env-variables.outputs.repository_name}}
       app_name: ${{needs.set-env-variables.outputs.app_name}}
+      heroku_api_key: ${{needs.set-env-variables.outputs.heroku_api_key}}
 
   deploy-application:
     if: ${{ github.event.action != 'closed' }}
-    needs: [set-env-variables]
+    needs: [set-env-variables, call-build-docker-image]
     runs-on: ubuntu-latest
     outputs:
       app_url: ${{ env.APP_URL }}
@@ -55,7 +56,7 @@ jobs:
       - name: 🚀 Deploy Application
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          heroku_api_key: ${{ env.HEROKU_API_KEY }}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ needs.set-env-variables.outputs.app_name }}
           heroku_email: "luismenesesep@gmail.com"
       - name: 🔗 Get Deployment URL
