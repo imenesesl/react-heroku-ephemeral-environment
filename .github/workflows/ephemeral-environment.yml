@@ -9,13 +9,13 @@ permissions:
   issues: write
 
 jobs:
-  call-build-docker-image:
-    uses: ./.github/workflows/build-docker-image.yml
+  ephemeral-environment-workflow:
+    uses: imenesesl/heroku-ephemeral-environment/.github/workflows/ephemeral-environment-workflow.yml@main
     secrets:
       HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
     with:
       repository_owner: ${{github.repository_owner}}
-      repository_name: "${{github.event.repository.name}}-react"
+      repository_name: ${{github.event.repository.name}}
       app_name: react-vite-pr-${{github.event.number}}
       heroku_email: "luismenesesep@gmail.com"
   
