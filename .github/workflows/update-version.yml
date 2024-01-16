@@ -11,5 +11,4 @@ jobs:
     secrets:
       GITHUB_REPO_PAT: ${{ secrets.REPO_ACCESS }}
     with:
-      increment_type: fix
       package_json_path: "./package.json"
