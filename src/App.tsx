@@ -1,7 +1,7 @@
-const App = () => (
-  <>
-    <h1>Empty template</h1>
-  </>
-);
+import { Scaffold } from '@components/scaffold';
 
-export default App;
+export const App = () => (
+  <Scaffold>
+    <div>Empty template</div>
+  </Scaffold>
+);
