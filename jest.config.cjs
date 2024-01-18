@@ -22,13 +22,18 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '/src/components/.*/index\\.ts$',
-    '\\.stories\\.(jsx?|tsx?)$',
+    '\\.stories\\.(jsx?|tsx?)$'
   ],
   testPathIgnorePatterns: [
     '/node_modules/',
     '/dist',
     '/storybook-static',
     '/coverage'
+  ],
+  transformIgnorePatterns: [
+    '/node_modules/',
+    '\\.stories\\.(jsx?|tsx?)$',
+    '/node_modules/(?!wrap-ansi|cliui).+\\.js$'
   ],
   coverageThreshold: {
     global: {
