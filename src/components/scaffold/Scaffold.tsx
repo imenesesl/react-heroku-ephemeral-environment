@@ -1,12 +1,20 @@
-import style from './Scaffold.module.scss';
 import { ScaffoldProps } from './types';
+import { IDs } from './utils/ids';
+
+import style from './Scaffold.module.scss';
 
 export const Scaffold = ({ children }: ScaffoldProps) => {
   return (
-    <div className={style.Scaffold}>
-      <header className={style.Scaffold__Header}>HEADER</header>
-      <div className={style.Scaffold__Children}>{children}</div>
-      <footer className={style.Scaffold__Footer}>FOOTER</footer>
+    <div data-testid={IDs.Scaffold} className={style.Scaffold}>
+      <header data-testid={IDs.Header} className={style.Scaffold__Header}>
+        HEADER
+      </header>
+      <div data-testid={IDs.Children} className={style.Scaffold__Children}>
+        {children}
+      </div>
+      <footer data-testid={IDs.Footer} className={style.Scaffold__Footer}>
+        FOOTER
+      </footer>
     </div>
   );
 };
