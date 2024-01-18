@@ -10,6 +10,15 @@ class ComponentWithError extends React.Component {
 }
 
 describe('ErrorBoundary', () => {
+  beforeAll(() => {
+    const consoleErrorSpy = jest.spyOn(console, 'error');
+    consoleErrorSpy.mockImplementation(() => {});
+  });
+
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
+
   it('catches error and displays fallback UI', () => {
     render(
       <ErrorBoundary id="test-error-boundary">
