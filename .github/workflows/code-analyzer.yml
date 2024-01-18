@@ -42,4 +42,4 @@ jobs:
         run: yarn install
 
       - name: 👀 Tests
-        run: yarn code:check
+        run: yarn test:coverage
