@@ -11,8 +11,8 @@
     "stylelint": "stylelint '**/*.(scss|css)'",
     "stylelint:fix": "stylelint '**/*.(scss|css)' --fix",
     "fix": "yarn lint:fix && yarn stylelint:fix",
-    "check": "tsc && yarn lint && yarn stylelint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "tsc": "tsc"
   },
   "dependencies": {
     "normalize.css": "^8.0.1",

@@ -25,4 +25,7 @@ jobs:
         run: yarn install
 
       - name: 👀 Checking code style
-        run: yarn check
+        run: |
+          yarn tsc
+          yarn lint
+          yarn stylelint
