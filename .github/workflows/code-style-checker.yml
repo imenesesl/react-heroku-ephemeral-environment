@@ -9,7 +9,7 @@ on:
       - 'main'
 
 jobs:
-  build:
+  code-style-checker:
     runs-on: ubuntu-latest
 
     steps:
