@@ -26,20 +26,6 @@ jobs:
 
       - name: 👀 Checking code style
         run: yarn code:check
-  testing-code-coverage:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: 📖 Get Node Version from .nvmrc
-        run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
-
-      - uses: actions/setup-node@v1
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: 📦 Install dependencies
-        run: yarn install
-
+      
       - name: 👀 Tests
         run: yarn test:coverage
