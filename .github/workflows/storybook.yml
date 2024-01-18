@@ -24,7 +24,7 @@ jobs:
         run: yarn build-storybook
 
       - name: 🚀 Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./storybook-static
+          branch: gh-pages
+          folder: ./storybook-static
