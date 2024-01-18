@@ -1,0 +1,24 @@
+@import '../style/variables';
+
+.Scaffold {
+    display: flex;
+    flex-direction: column;
+    min-height: $full-height;
+
+    &__Header {
+        height: $header-height;
+        position: fixed;
+        top: 0;
+        z-index: $z-header;
+    }
+
+    &__Children {
+        height: 100%;
+        margin-top: $header-height;
+        min-height: calc($full-height - $header-height);
+    }
+
+    &__Footer {
+        height: auto;
+    }
+}

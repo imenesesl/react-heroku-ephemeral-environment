@@ -1,7 +1,9 @@
+import { Scaffold } from '@components/scaffold';
+
 const App = () => (
-  <>
-    <h1>Empty template</h1>
-  </>
+  <Scaffold>
+    <div>Empty template</div>
+  </Scaffold>
 );
 
 export default App;
