@@ -23,6 +23,12 @@ module.exports = {
     '/node_modules/',
     '/src/components/.*/index\\.ts$'
   ],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/dist',
+    '/storybook-static',
+    '/coverage'
+  ],
   coverageThreshold: {
     global: {
       branches: 100,
