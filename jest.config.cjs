@@ -10,7 +10,7 @@ module.exports = {
     }),
     '\\.(css|scss)$': '<rootDir>/__mocks__/style-mock.js'
   },
-  setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/jest-setup.ts', 'jest-fetch-mock'],
   preset: 'ts-jest',
   testEnvironment: 'jest-environment-jsdom',
   transform: {
