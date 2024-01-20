@@ -1,10 +1,26 @@
-import React from 'react';
+import { StrictMode } from 'react';
+
+import { Router, RouterProvider } from '@tanstack/react-router';
 import { createRoot } from 'react-dom/client';
-import { App } from '@root/App';
+
+import { routeTree } from './routeTree.gen';
+
 import '@root/style/index.scss';
 
-createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const router = new Router({ routeTree, defaultPreload: 'intent' });
+
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router;
+  }
+}
+
+const rootElement = document.getElementById('root')!;
+if (!rootElement.innerHTML) {
+  const root = createRoot(rootElement);
+  root.render(
+    <StrictMode>
+      <RouterProvider router={router} />
+    </StrictMode>
+  );
+}

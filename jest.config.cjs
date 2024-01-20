@@ -22,7 +22,8 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '/src/components/.*/index\\.ts$',
-    '\\.stories\\.(jsx?|tsx?)$'
+    '\\.stories\\.(jsx?|tsx?)$',
+    '/src/routes/'
   ],
   testPathIgnorePatterns: [
     '/node_modules/',

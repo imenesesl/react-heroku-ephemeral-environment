@@ -10,10 +10,6 @@ jest.mock('react-dom/client', () => {
   };
 });
 
-jest.mock('@root/App', () => ({
-  App: () => <div>App rendered</div>
-}));
-
 describe('index.js', () => {
   it('renders without crashing', () => {
     const div = document.createElement('div');

@@ -1,7 +1,6 @@
+import style from './Scaffold.module.scss';
 import { ScaffoldProps } from './types';
 import { IDs } from './utils/constants';
-
-import style from './Scaffold.module.scss';
 
 export const Scaffold = ({ children }: ScaffoldProps) => {
   return (
