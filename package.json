@@ -18,8 +18,8 @@
     "test:coverage": "jest --coverage",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "postinstall": "yarn upgrade",
-    "postuninstall": "yarn install"
+    "app:refresh": "yarn install && yarn upgrade",
+    "app:clean": "rm -rf ./node_modules && yarn app:refresh"
   },
   "dependencies": {
     "normalize.css": "^8.0.1",
