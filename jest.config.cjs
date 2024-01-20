@@ -23,7 +23,8 @@ module.exports = {
     '/node_modules/',
     '/src/components/.*/index\\.ts$',
     '\\.stories\\.(jsx?|tsx?)$',
-    '/src/routes/'
+    '/src/routes/',
+    'src/routeTree.gen.ts'
   ],
   testPathIgnorePatterns: [
     '/node_modules/',
