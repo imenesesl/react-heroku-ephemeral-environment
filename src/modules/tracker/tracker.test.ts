@@ -1,6 +1,6 @@
 import { Tracker } from './';
-import { ITracker } from './types';
 import * as constants from './constants';
+import { ITracker } from './types';
 
 jest.mock('./constants', () => ({
   ...jest.requireActual('./constants'),

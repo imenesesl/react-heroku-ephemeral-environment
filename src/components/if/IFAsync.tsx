@@ -1,4 +1,5 @@
 import { ErrorBoundary } from '@components/error-boundary';
+
 import { IFAsyncProps } from './types';
 
 export const IFAsync = <T extends object>({

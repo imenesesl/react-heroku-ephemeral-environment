@@ -1,6 +1,8 @@
-import { render, screen } from '@testing-library/react';
-import { IFAsync } from '.';
 import { FC } from 'react';
+
+import { render, screen } from '@testing-library/react';
+
+import { IFAsync } from '.';
 
 type MockComponentProps = { label: string };
 const MockComponent: FC<MockComponentProps> = ({ label }) => <div>{label}</div>;

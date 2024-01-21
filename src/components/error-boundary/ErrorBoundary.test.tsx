@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { render, screen } from '@testing-library/react';
+
 import { ErrorBoundary } from '.';
 
 class ComponentWithError extends React.Component {

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
 const { pathsToModuleNameMapper } = require('ts-jest');
+
 const { compilerOptions } = require('./tsconfig.json');
 
 module.exports = {
@@ -22,7 +23,10 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '/src/components/.*/index\\.ts$',
-    '\\.stories\\.(jsx?|tsx?)$'
+    '\\.stories\\.(jsx?|tsx?)$',
+    '/src/routes/',
+    'src/routeTree.gen.ts',
+    'src/main.tsx'
   ],
   testPathIgnorePatterns: [
     '/node_modules/',

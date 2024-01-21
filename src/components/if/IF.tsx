@@ -1,4 +1,5 @@
 import { ErrorBoundary } from '@components/error-boundary';
+
 import { IFProps } from './types';
 
 export const IF = <T extends object>({
