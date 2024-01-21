@@ -3,10 +3,30 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LoginImport } from './routes/login'
+import { Route as StoreImport } from './routes/_store'
+import { Route as MeImport } from './routes/_me'
 import { Route as Import } from './routes/*'
 import { Route as IndexImport } from './routes/index'
+import { Route as StoreStoreStoreIdImport } from './routes/_store.store.$storeId'
+import { Route as MeMeHomeImport } from './routes/_me.me.home'
 
 // Create/Update Routes
+
+const LoginRoute = LoginImport.update({
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const StoreRoute = StoreImport.update({
+  id: '/_store',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MeRoute = MeImport.update({
+  id: '/_me',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const Route = Import.update({
   path: '/*',
@@ -16,6 +36,16 @@ const Route = Import.update({
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const StoreStoreStoreIdRoute = StoreStoreStoreIdImport.update({
+  path: '/store/$storeId',
+  getParentRoute: () => StoreRoute,
+} as any)
+
+const MeMeHomeRoute = MeMeHomeImport.update({
+  path: '/me/home',
+  getParentRoute: () => MeRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -30,9 +60,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Import
       parentRoute: typeof rootRoute
     }
+    '/_me': {
+      preLoaderRoute: typeof MeImport
+      parentRoute: typeof rootRoute
+    }
+    '/_store': {
+      preLoaderRoute: typeof StoreImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/_me/me/home': {
+      preLoaderRoute: typeof MeMeHomeImport
+      parentRoute: typeof MeImport
+    }
+    '/_store/store/$storeId': {
+      preLoaderRoute: typeof StoreStoreStoreIdImport
+      parentRoute: typeof StoreImport
+    }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([IndexRoute, Route])
+export const routeTree = rootRoute.addChildren([
+  IndexRoute,
+  Route,
+  MeRoute.addChildren([MeMeHomeRoute]),
+  StoreRoute.addChildren([StoreStoreStoreIdRoute]),
+  LoginRoute,
+])

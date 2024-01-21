@@ -1,7 +1,6 @@
 import { Outlet, RootRoute } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 
-import { Scaffold } from '@components/scaffold';
 import { Logger } from '@modules/logger';
 import { Tracker } from '@modules/tracker';
 import { ICallbackArgs } from '@modules/tracker/types';
@@ -21,9 +20,9 @@ export const Route = new RootRoute({
     else logger.log('before-load', payload);
   },
   component: () => (
-    <Scaffold>
+    <>
       <Outlet />
       <TanStackRouterDevtools />
-    </Scaffold>
+    </>
   )
 });
