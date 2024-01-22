@@ -1,11 +1,12 @@
 import { Outlet, RootRoute } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
+import { getEnv } from '@utilities/get-env';
 
 import { Logger } from '@modules/logger';
 import { Tracker } from '@modules/tracker';
 import { ICallbackArgs } from '@modules/tracker/types';
 
-const tracker = new Tracker(import.meta.env.VITE_SEGMENT__WRITE_KEY);
+const tracker = new Tracker(getEnv('SEGMENT__WRITE_KEY'));
 const logger = new Logger('@Root');
 
 export const Route = new RootRoute({
@@ -16,7 +17,7 @@ export const Route = new RootRoute({
       type: 'track',
       userId: 'user-id'
     };
-    if (import.meta.env.PROD) tracker.track(payload);
+    if (getEnv('NODE_ENV', { isGlobal: true })) tracker.track(payload);
     else logger.log('before-load', payload);
   },
   component: () => (

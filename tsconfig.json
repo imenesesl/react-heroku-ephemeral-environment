@@ -7,6 +7,7 @@
     "paths": {
       "@components/*": ["./src/components/*"],
       "@modules/*": ["./src/modules/*"],
+      "@utilities/*": ["./src/utilities/*"],
       "@root/*": ["./src/*"]
     },
 

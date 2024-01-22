@@ -22,7 +22,8 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!src/**/*.d.ts'],
   coveragePathIgnorePatterns: [
     '/node_modules/',
-    '/src/components/.*/index\\.ts$',
+    '/src/.*/index\\.ts$',
+    '/src/.*/constants\\.ts$',
     '\\.stories\\.(jsx?|tsx?)$',
     '/src/routes/',
     'src/routeTree.gen.ts',

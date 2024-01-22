@@ -1,6 +1,6 @@
 import { Logger } from '@modules/logger';
 
-export const MODULE_NAME = '@@Tracker';
+const MODULE_NAME = '@@Tracker';
 
 export const CALLBACK_TYPES = ['track'] as const;
 

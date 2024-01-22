@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 
 import { Scaffold } from './Scaffold';
-import { IDs } from './utils/constants';
+import { IDs } from './types';
 
 test('renders the Scaffold component with header, children, and footer', () => {
   const { getByTestId } = render(<Scaffold>Content</Scaffold>);
