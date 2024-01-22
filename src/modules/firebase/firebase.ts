@@ -1,5 +1,6 @@
-import { getEnv } from '@utilities/get-env';
 import { initializeApp } from 'firebase/app';
+
+import { getEnv } from '@utilities/get-env';
 
 const firebaseConfig = {
   apiKey: getEnv('FIREBASE__API_KEY'),

@@ -1,10 +1,10 @@
 import { Outlet, RootRoute } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
-import { getEnv } from '@utilities/get-env';
 
 import { Logger } from '@modules/logger';
 import { Tracker } from '@modules/tracker';
 import { ICallbackArgs } from '@modules/tracker/types';
+import { getEnv } from '@utilities/get-env';
 
 const tracker = new Tracker(getEnv('SEGMENT__WRITE_KEY'));
 const logger = new Logger('@Root');
