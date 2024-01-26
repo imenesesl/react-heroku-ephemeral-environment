@@ -1,4 +1,4 @@
-import { FileRoute, Outlet } from '@tanstack/react-router';
+import { createFileRoute, Outlet } from '@tanstack/react-router';
 
 import { Scaffold } from '@components/scaffold';
 
@@ -10,6 +10,6 @@ const StoreLayout = () => {
   );
 };
 
-export const Route = new FileRoute('/_store').createRoute({
+export const Route = createFileRoute('/_store')({
   component: StoreLayout
 });

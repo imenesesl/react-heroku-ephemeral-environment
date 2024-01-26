@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef, useState } from 'react';
 
-import { FileRoute, Navigate } from '@tanstack/react-router';
+import { createFileRoute, Navigate } from '@tanstack/react-router';
 
 const withProtectedRoute = (WrappedComponent: FC) => {
   return (props: Record<string, unknown>) => {
@@ -29,6 +29,6 @@ const MePage = () => {
   return <>Me Page Page here!</>;
 };
 
-export const Route = new FileRoute('/_me/me/home').createRoute({
+export const Route = createFileRoute('/_me/me/home')({
   component: withProtectedRoute(MePage)
 });
