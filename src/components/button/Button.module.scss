@@ -1,0 +1,21 @@
+@import '../style/border';
+@import '../style/utils';
+
+.Button {
+    @include max-button-size;
+    @include border(black, sm, solid, full);
+
+    @apply flex items-center justify-center;
+
+    &__WithIcon {
+        @apply justify-between gap-4; 
+    }
+
+    &__Icon {
+        @apply text-2xl ml-4;
+    }
+
+    &__Empty {
+        @apply mr-4 w-6 h-6;
+    }
+}
