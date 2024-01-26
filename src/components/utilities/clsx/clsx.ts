@@ -3,7 +3,7 @@ import { ClassNameArg } from './types';
 export const clsx = (...args: ClassNameArg[]) => {
   const classes: string[] = [];
 
-  args.forEach((arg) => {
+  args.forEach((arg = {}) => {
     if (typeof arg === 'string') {
       classes.push(arg);
     } else {

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import { IF } from '.';
 
-describe('IF Component', () => {
+describe('IF', () => {
   it('renders children when condition is true', () => {
     render(<IF condition={true} element={() => <div>Child Component</div>} />);
     expect(screen.getByText('Child Component')).toBeInTheDocument();

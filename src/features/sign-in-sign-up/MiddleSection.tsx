@@ -1,5 +1,3 @@
-import { Link } from '@tanstack/react-router';
-
 import { Button } from '@components/button';
 import { Facebook, Google } from '@components/icons';
 
@@ -19,13 +17,14 @@ export const MiddleSection = ({
       <Button icon={Facebook} label={facebookLabel} />
       <p className={style.SignInSignUp__MiddleSection__Announcement}>
         {ctaAnnouncementLabel}
-        <Link
+        <a
+          onClick={(event) => event.preventDefault()}
           className={style.SignInSignUp__MiddleSection__Announcement__CTA}
           type="button"
-          to={ctaLink}
+          href={ctaLink}
         >
           {ctaLabel}
-        </Link>
+        </a>
       </p>
     </section>
   );

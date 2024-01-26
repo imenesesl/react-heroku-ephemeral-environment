@@ -11,6 +11,7 @@
       "@assets/*": ["./src/assets/*"],
       "@modules/*": ["./src/modules/*"],
       "@utilities/*": ["./src/utilities/*"],
+      "@mocks/*": ["./src/__mocks__/*"],
       "@root/*": ["./src/*"]
     },
 

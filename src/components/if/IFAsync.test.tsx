@@ -7,7 +7,7 @@ import { IFAsync } from '.';
 type MockComponentProps = { label: string };
 const MockComponent: FC<MockComponentProps> = ({ label }) => <div>{label}</div>;
 
-describe('IFAsync Component', () => {
+describe('IFAsync', () => {
   it('renders loading state', () => {
     render(
       <IFAsync

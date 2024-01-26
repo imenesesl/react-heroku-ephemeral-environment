@@ -13,6 +13,7 @@ export default defineConfig({
     alias: {
       '@modules': path.resolve(__dirname, 'src/modules'),
       '@utilities': path.resolve(__dirname, 'src/utilities'),
+      '@mocks': path.resolve(__dirname, 'src/__mocks__'),
       '@components': path.resolve(__dirname, 'src/components'),
       '@features': path.resolve(__dirname, 'src/features'),
       '@pages': path.resolve(__dirname, 'src/pages'),
