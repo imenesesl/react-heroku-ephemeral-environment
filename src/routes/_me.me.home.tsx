@@ -19,7 +19,7 @@ const withProtectedRoute = (WrappedComponent: FC) => {
 
     if (!renderRef.current) return <>Loading</>;
 
-    if (!isAuthenticated) return <Navigate to="/login" />;
+    if (!isAuthenticated) return <Navigate to="/signin" />;
 
     return <WrappedComponent {...props} />;
   };

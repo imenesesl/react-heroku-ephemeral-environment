@@ -3,7 +3,8 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as LoginImport } from './routes/login'
+import { Route as SignupImport } from './routes/signup'
+import { Route as SigninImport } from './routes/signin'
 import { Route as StoreImport } from './routes/_store'
 import { Route as MeImport } from './routes/_me'
 import { Route as Import } from './routes/*'
@@ -13,8 +14,13 @@ import { Route as MeMeHomeImport } from './routes/_me.me.home'
 
 // Create/Update Routes
 
-const LoginRoute = LoginImport.update({
-  path: '/login',
+const SignupRoute = SignupImport.update({
+  path: '/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SigninRoute = SigninImport.update({
+  path: '/signin',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -68,8 +74,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoreImport
       parentRoute: typeof rootRoute
     }
-    '/login': {
-      preLoaderRoute: typeof LoginImport
+    '/signin': {
+      preLoaderRoute: typeof SigninImport
+      parentRoute: typeof rootRoute
+    }
+    '/signup': {
+      preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
     '/_me/me/home': {
@@ -90,5 +100,6 @@ export const routeTree = rootRoute.addChildren([
   Route,
   MeRoute.addChildren([MeMeHomeRoute]),
   StoreRoute.addChildren([StoreStoreStoreIdRoute]),
-  LoginRoute,
+  SigninRoute,
+  SignupRoute,
 ])
