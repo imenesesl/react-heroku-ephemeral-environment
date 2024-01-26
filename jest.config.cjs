@@ -27,7 +27,8 @@ module.exports = {
     '\\.stories\\.(jsx?|tsx?)$',
     '/src/routes/',
     'src/routeTree.gen.ts',
-    'src/main.tsx'
+    'src/main.tsx',
+    'src/components/icons/brands.tsx'
   ],
   testPathIgnorePatterns: [
     '/node_modules/',
