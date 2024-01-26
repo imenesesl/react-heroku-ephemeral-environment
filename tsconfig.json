@@ -6,6 +6,9 @@
     "baseUrl": ".",
     "paths": {
       "@components/*": ["./src/components/*"],
+      "@features/*": ["./src/features/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@assets/*": ["./src/assets/*"],
       "@modules/*": ["./src/modules/*"],
       "@utilities/*": ["./src/utilities/*"],
       "@root/*": ["./src/*"]
@@ -31,6 +34,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "test", "./jest-setup.ts"],
+  "include": ["src", "test", "./jest-setup.ts", "**/*.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
