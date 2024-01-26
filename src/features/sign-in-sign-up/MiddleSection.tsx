@@ -1,3 +1,5 @@
+import { useNavigate } from '@tanstack/react-router';
+
 import { Button } from '@components/button';
 import { Facebook, Google } from '@components/icons';
 
@@ -9,16 +11,30 @@ export const MiddleSection = ({
   ctaLabel,
   ctaLink,
   facebookLabel,
-  googleLabel
+  googleLabel,
+  onSignInSignUpWithGoogle,
+  onSignInSignUpWithFacebook
 }: MiddleSectionProps) => {
+  const navigate = useNavigate();
   return (
     <section className={style.SignInSignUp__MiddleSection}>
-      <Button icon={Google} label={googleLabel} />
-      <Button icon={Facebook} label={facebookLabel} />
+      <Button
+        onClick={onSignInSignUpWithGoogle}
+        icon={Google}
+        label={googleLabel}
+      />
+      <Button
+        onClick={onSignInSignUpWithFacebook}
+        icon={Facebook}
+        label={facebookLabel}
+      />
       <p className={style.SignInSignUp__MiddleSection__Announcement}>
         {ctaAnnouncementLabel}
         <a
-          onClick={(event) => event.preventDefault()}
+          onClick={(event) => {
+            event.preventDefault();
+            navigate({ to: ctaLink });
+          }}
           className={style.SignInSignUp__MiddleSection__Announcement__CTA}
           type="button"
           href={ctaLink}

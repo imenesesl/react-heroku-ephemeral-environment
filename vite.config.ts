@@ -15,6 +15,7 @@ export default defineConfig({
       '@utilities': path.resolve(__dirname, 'src/utilities'),
       '@mocks': path.resolve(__dirname, 'src/__mocks__'),
       '@components': path.resolve(__dirname, 'src/components'),
+      '@core': path.resolve(__dirname, 'src/core'),
       '@features': path.resolve(__dirname, 'src/features'),
       '@pages': path.resolve(__dirname, 'src/pages'),
       '@assets': path.resolve(__dirname, 'src/assets'),

@@ -10,6 +10,10 @@ jest.mock('@components/icons', () => ({
   Google: MockIcon
 }));
 
+jest.mock('@tanstack/react-router', () => ({
+  useNavigate: jest.fn().mockReturnValue(() => {})
+}));
+
 describe('MiddleSection', () => {
   const props: MiddleSectionProps = {
     ctaAnnouncementLabel: 'Do you need help?',

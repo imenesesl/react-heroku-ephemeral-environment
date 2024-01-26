@@ -11,4 +11,5 @@ export enum IDs {
 export type ButtonProps = {
   label: string;
   icon?: FC<SVGIconProps>;
+  onClick?: () => Promise<void>;
 };
