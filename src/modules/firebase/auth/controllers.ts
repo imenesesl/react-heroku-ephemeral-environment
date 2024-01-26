@@ -1,13 +1,15 @@
 import {
-  beforeAuthStateChanged as beforeFirebaseAuthStateChanged,
   getAuth,
-  onAuthStateChanged as onFirebaseAuthStateChanged
+  NextOrObserver,
+  onAuthStateChanged as onFirebaseAuthStateChanged,
+  User
 } from 'firebase/auth';
 
 import { app } from '../firebase';
 
 const auth = getAuth(app);
 
-export const onAuthStateChanged = onFirebaseAuthStateChanged;
-export const beforeAuthStateChanged = beforeFirebaseAuthStateChanged;
+export const onAuthStateChanged = (observer: NextOrObserver<User>) =>
+  onFirebaseAuthStateChanged(auth, observer);
+
 export const signOut = auth?.signOut;
