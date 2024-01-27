@@ -12,4 +12,4 @@ const auth = getAuth(app);
 export const onAuthStateChanged = (observer: NextOrObserver<User>) =>
   onFirebaseAuthStateChanged(auth, observer);
 
-export const signOut = auth?.signOut;
+export const signOut = auth.signOut;
