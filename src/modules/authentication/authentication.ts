@@ -17,7 +17,7 @@ export class Authentication implements AuthMethods {
 
   signUp = async () => {
     try {
-      await this.signIn();
+      await this.engine.signIn();
       logger.log('sign-up:success');
     } catch (error) {
       logger.log('sign-up:error', error);

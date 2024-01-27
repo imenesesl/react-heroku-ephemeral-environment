@@ -1,4 +1,4 @@
-const PROVIDER_NAMES = ['google', 'facebook'] as const;
+import { PROVIDER_NAMES } from './constants';
 
 export type ProviderTypes = (typeof PROVIDER_NAMES)[number];
 

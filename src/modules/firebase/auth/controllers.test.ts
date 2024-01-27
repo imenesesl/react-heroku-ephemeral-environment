@@ -11,12 +11,12 @@ jest.mock('firebase/auth', () => ({
   onAuthStateChanged: jest.fn()
 }));
 
-describe('Auth Module', () => {
+describe('Auth Controllers', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test('onAuthStateChanged calls Firebase onAuthStateChanged with correct parameters', () => {
+  it('onAuthStateChanged calls Firebase onAuthStateChanged with correct parameters', () => {
     const observer = jest.fn();
 
     authModule.onAuthStateChanged(observer);
@@ -24,7 +24,7 @@ describe('Auth Module', () => {
     expect(onAuthStateChanged).toHaveBeenCalled();
   });
 
-  test('signOut calls Firebase signOut', async () => {
+  it('signOut calls Firebase signOut', async () => {
     const mockSignOut = jest.fn();
 
     (getAuth as jest.Mock).mockReturnValue({ signOut: mockSignOut });

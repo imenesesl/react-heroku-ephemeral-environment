@@ -16,8 +16,8 @@ export class GoogleAuthentication implements AuthMethods {
 
   signUp = async () => {
     try {
-      await this.signIn();
-      logger.log('google:success:sign-up');
+      const result = await signInWithGoogle();
+      logger.log('google:success:sign-up', result.user);
     } catch (error) {
       logger.log('google:error:sign-up', error);
     }

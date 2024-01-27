@@ -19,7 +19,7 @@ export class AuthenticationFactory {
       const engine = new Authentication(provider);
       return engine;
     } catch (error) {
-      logger.log('factory:error', error);
+      logger.log('factory:error', providerName, error);
     }
   }
 }
