@@ -14,7 +14,7 @@ const TestConsumer = () => {
 };
 
 describe('I18nProvider', () => {
-  it('should provide the context values to its children', () => {
+  it('provide the context values to its children', () => {
     const testRecords = { en: { header: 'My Header' } };
 
     const { getByTestId } = render(
@@ -27,7 +27,7 @@ describe('I18nProvider', () => {
     expect(contextValue).toEqual(JSON.stringify(testRecords));
   });
 
-  it('should provide an empty object when no records are provided', () => {
+  it('provide an empty object when no records are provided', () => {
     const { getByTestId } = render(
       <I18nProvider records={{}}>
         <TestConsumer />
