@@ -1,13 +1,13 @@
-export type MiddleSectionProps = {
+export type MiddleSectionProps<T = string> = {
   googleLabel: string;
   onSignInSignUpWithGoogle?: () => Promise<void>;
   facebookLabel: string;
   onSignInSignUpWithFacebook?: () => Promise<void>;
   ctaAnnouncementLabel: string;
   ctaLabel: string;
-  ctaLink: string;
+  ctaLink: T;
 };
 
-export type SignInSignUpProps = {
-  middleSection: MiddleSectionProps;
+export type SignInSignUpProps<T = string> = {
+  middleSection: MiddleSectionProps<T>;
 };

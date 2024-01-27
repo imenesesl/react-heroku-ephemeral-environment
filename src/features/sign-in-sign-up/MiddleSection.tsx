@@ -6,7 +6,7 @@ import { Facebook, Google } from '@components/icons';
 import style from './SignInSignUp.module.scss';
 import { MiddleSectionProps } from './types';
 
-export const MiddleSection = ({
+export function MiddleSection<T>({
   ctaAnnouncementLabel,
   ctaLabel,
   ctaLink,
@@ -14,7 +14,7 @@ export const MiddleSection = ({
   googleLabel,
   onSignInSignUpWithGoogle,
   onSignInSignUpWithFacebook
-}: MiddleSectionProps) => {
+}: MiddleSectionProps<T>) {
   const navigate = useNavigate();
   return (
     <section className={style.SignInSignUp__MiddleSection}>
@@ -33,15 +33,15 @@ export const MiddleSection = ({
         <a
           onClick={(event) => {
             event.preventDefault();
-            navigate({ to: ctaLink });
+            navigate({ to: ctaLink as string });
           }}
           className={style.SignInSignUp__MiddleSection__Announcement__CTA}
           type="button"
-          href={ctaLink}
+          href={ctaLink as string}
         >
           {ctaLabel}
         </a>
       </p>
     </section>
   );
-};
+}

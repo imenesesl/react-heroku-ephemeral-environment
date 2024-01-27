@@ -1,0 +1,11 @@
+{
+  "auth:sign-in": "Sign in with {provider}",
+  "auth:sign-up": "Sign up with {provider}",
+  "auth:sign-out": "Log out with {provider}",
+  "auth:sign-in:cta-announcement-label": "No account?",
+  "auth:sign-up:cta-label": "Create one",
+  "auth:sign-up:cta-announcement-label": "Already have an account?",
+  "auth:sign-in:cta-label": "Sign in",
+  "facebook:name": "Facebook",
+  "google:name": "Google"
+}

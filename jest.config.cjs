@@ -28,7 +28,8 @@ module.exports = {
     '/src/routes/',
     'src/routeTree.gen.ts',
     'src/main.tsx',
-    'src/components/icons/brands.tsx'
+    'src/components/icons/brands.tsx',
+    'src/locales/'
   ],
   testPathIgnorePatterns: [
     '/node_modules/',

@@ -19,7 +19,8 @@ export default defineConfig({
       '@features': path.resolve(__dirname, 'src/features'),
       '@pages': path.resolve(__dirname, 'src/pages'),
       '@assets': path.resolve(__dirname, 'src/assets'),
-      '@root': path.resolve(__dirname, 'src')
+      '@root': path.resolve(__dirname, 'src'),
+      '@locales': path.resolve(__dirname, 'src/locales')
     }
   },
   plugins: [

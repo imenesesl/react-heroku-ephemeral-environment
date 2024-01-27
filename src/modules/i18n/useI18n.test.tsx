@@ -3,6 +3,12 @@ import { cleanup, render } from '@testing-library/react';
 import { I18nProvider } from '.';
 import { useI18n } from './useI18n';
 
+jest.mock('./constants', () => ({
+  logger: {
+    log: jest.fn()
+  }
+}));
+
 const TestComponent = () => {
   const i18n = useI18n();
   return <div>{i18n.tr('key')}</div>;
