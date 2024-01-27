@@ -1,7 +1,7 @@
 import { getEnv } from './';
-import { logger } from './utils/constants';
+import { logger } from './constants';
 
-jest.mock('./utils/constants', () => ({
+jest.mock('./constants', () => ({
   logger: {
     log: jest.fn()
   }

@@ -10,6 +10,5 @@ const MeLayout = () => {
 };
 
 export const Route = createFileRoute('/_me')({
-  component: MeLayout,
-  caseSensitive: true
+  component: MeLayout
 });
