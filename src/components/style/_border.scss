@@ -1,0 +1,30 @@
+@mixin border-color($color) {
+    @if $color==black {
+        @apply border-black
+    }
+}
+
+@mixin border-width($width) {
+    @if $width==sm {
+        border-width: 1px;
+    }
+}
+
+@mixin border-style($style) {
+    @if $style==solid {
+        @apply border-solid
+    }
+}
+
+@mixin border-type($type) {
+    @if $type==full {
+        @apply rounded-full
+    }
+}
+
+@mixin border($color, $width, $style, $type) {
+    @include border-color($color);
+    @include border-width($width);
+    @include border-style($style);
+    @include border-type($type);
+}

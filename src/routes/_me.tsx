@@ -1,4 +1,4 @@
-import { FileRoute, Outlet } from '@tanstack/react-router';
+import { createFileRoute, Outlet } from '@tanstack/react-router';
 
 const MeLayout = () => {
   return (
@@ -9,7 +9,7 @@ const MeLayout = () => {
   );
 };
 
-export const Route = new FileRoute('/_me').createRoute({
+export const Route = createFileRoute('/_me')({
   component: MeLayout,
   caseSensitive: true
 });

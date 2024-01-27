@@ -6,8 +6,14 @@
     "baseUrl": ".",
     "paths": {
       "@components/*": ["./src/components/*"],
+      "@locales/*": ["./src/locales/*"],
+      "@features/*": ["./src/features/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@assets/*": ["./src/assets/*"],
       "@modules/*": ["./src/modules/*"],
       "@utilities/*": ["./src/utilities/*"],
+      "@core/*": ["./src/core/*"],
+      "@mocks/*": ["./src/__mocks__/*"],
       "@root/*": ["./src/*"]
     },
 
@@ -31,6 +37,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "test", "./jest-setup.ts"],
+  "include": ["src", "test", "./jest-setup.ts", "**/*.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

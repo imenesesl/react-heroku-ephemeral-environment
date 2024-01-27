@@ -1,11 +1,11 @@
-import { FileRoute } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 
 const StoreId = () => {
   const loader = Route.useLoaderData();
   return <>Store id Page here! {JSON.stringify(loader)}</>;
 };
 
-export const Route = new FileRoute('/_store/store/$storeId').createRoute({
+export const Route = createFileRoute('/_store/store/$storeId')({
   component: StoreId,
   pendingComponent: () => <>loader...</>,
   errorComponent: () => <>error...</>,

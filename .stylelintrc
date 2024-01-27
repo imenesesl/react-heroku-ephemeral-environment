@@ -13,7 +13,11 @@
         "ignoreAtRules": [
           "tailwind",
           "apply",
+          "mixin",
           "variants",
+          "include",
+          "if",
+          "else",
           "responsive",
           "screen"
         ]
