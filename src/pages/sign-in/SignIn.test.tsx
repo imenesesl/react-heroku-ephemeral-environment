@@ -26,7 +26,7 @@ jest.mock('@features/sign-in-sign-up', () => ({
 }));
 
 describe('SignIn', () => {
-  it('should pass the correct props to SignInFeature', () => {
+  it('pass the correct props to SignInFeature', () => {
     render(<SignIn />);
 
     expect(SignInSignUp).toHaveBeenCalledWith(

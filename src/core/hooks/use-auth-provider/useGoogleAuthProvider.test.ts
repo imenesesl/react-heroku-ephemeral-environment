@@ -12,6 +12,14 @@ jest.mock('@modules/authentication', () => ({
   }
 }));
 
+jest.mock('./useAuthCallbackHandler', () => ({
+  useAuthCallbackHandler: jest.fn().mockReturnValue({
+    signIn: jest.fn(),
+    signUp: jest.fn(),
+    signOut: jest.fn()
+  })
+}));
+
 jest.mock('@modules/i18n', () => ({
   useI18n: jest.fn().mockReturnValue({
     tr: jest.fn(

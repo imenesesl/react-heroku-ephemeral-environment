@@ -1,4 +1,4 @@
-import { ENV_VARIABLES } from './utils/constants';
+import { ENV_VARIABLES } from './constants';
 
 export type IEnvVariable = (typeof ENV_VARIABLES)[number];
 

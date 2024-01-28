@@ -1,5 +1,5 @@
+import { logger } from './constants';
 import { IEnvVariable, IEnvVariableOptions } from './types';
-import { logger } from './utils/constants';
 
 export const getEnv = (key: IEnvVariable, options?: IEnvVariableOptions) => {
   const { isGlobal = false } = options ?? {};
