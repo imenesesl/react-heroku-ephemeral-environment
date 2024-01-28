@@ -6,7 +6,7 @@ import { authenticationContext } from './context';
 import { useAuthentication } from './useAuthentication';
 
 describe('useAuthentication Hook', () => {
-  it('should use context and return its value', () => {
+  it('use context and return its value', () => {
     const mockValue = { uid: '123', name: 'my name' };
 
     const wrapper = ({ children }: PropsWithChildren) => (

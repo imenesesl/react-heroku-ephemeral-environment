@@ -12,7 +12,7 @@ jest.mock('@modules/firebase', () => ({
 }));
 
 describe('AuthenticationProvider', () => {
-  it('should provide null when there is no user', () => {
+  it('provide null when there is no user', () => {
     (onAuthStateChanged as jest.Mock).mockImplementation((callback) => {
       callback(null);
       return () => {};
@@ -33,7 +33,7 @@ describe('AuthenticationProvider', () => {
     expect(contextValue).toBeNull();
   });
 
-  it('should provide user data when a user is authenticated with all data', () => {
+  it('provide user data when a user is authenticated with all data', () => {
     const mockUser = { uid: '123', displayName: 'John Doe' };
 
     (onAuthStateChanged as jest.Mock).mockImplementation((callback) => {
@@ -60,7 +60,7 @@ describe('AuthenticationProvider', () => {
   });
 });
 
-it('should provide user data when a user is authenticated with null data', () => {
+it('provide user data when a user is authenticated with null data', () => {
   const mockUser = { uid: '123', displayName: null };
 
   (onAuthStateChanged as jest.Mock).mockImplementation((callback) => {
