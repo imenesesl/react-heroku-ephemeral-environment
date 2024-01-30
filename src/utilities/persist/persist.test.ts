@@ -1,4 +1,4 @@
-import { persist } from '.';
+import { Persist } from '.';
 import { logger, UTILITY_NAME } from './constants';
 
 jest.mock('./constants', () => ({
@@ -7,7 +7,7 @@ jest.mock('./constants', () => ({
   }
 }));
 
-describe('persist utility', () => {
+describe('Persist', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
@@ -33,13 +33,12 @@ describe('persist utility', () => {
   });
 
   it('store and retrieve a value', () => {
-    const { set, get } = persist();
     const testKey = 'testKey';
     const testData = { a: 1 };
 
-    set(testKey, testData);
+    Persist.set(testKey, testData);
 
-    expect(get(testKey)).toEqual(testData);
+    expect(Persist.get(testKey)).toEqual(testData);
 
     expect(window.localStorage.setItem).toHaveBeenCalledWith(
       `${UTILITY_NAME}:${testKey}`,
@@ -48,46 +47,41 @@ describe('persist utility', () => {
   });
 
   it('return null for non-existent keys', () => {
-    const { get } = persist();
     const testKey = 'nonExistentKey';
-    expect(get(testKey)).toBeNull();
+    expect(Persist.get(testKey)).toBeNull();
   });
 
   it('not store undefined or null values', () => {
-    const { set, get } = persist();
-    set('undefinedKey', undefined);
-    expect(get('undefinedKey')).toBeNull();
-    set('nullKey', null);
-    expect(get('nullKey')).toBeNull();
+    Persist.set('undefinedKey', undefined);
+    expect(Persist.get('undefinedKey')).toBeNull();
+    Persist.set('nullKey', null);
+    expect(Persist.get('nullKey')).toBeNull();
   });
 
   it('handle storage errors gracefully', () => {
-    const { set, get } = persist();
     jest.spyOn(window.localStorage, 'setItem').mockImplementation(() => {
       throw new Error('Storage failure');
     });
     jest.spyOn(window.localStorage, 'getItem').mockImplementation(() => {
       throw new Error('Storage failure');
     });
-    expect(() => set('errorKey', { b: 2 })).not.toThrow();
+    expect(() => Persist.set('errorKey', { b: 2 })).not.toThrow();
     expect(logger.log).toHaveBeenCalledWith('set:error', expect.any(Error));
-    expect(() => get('errorKey')).not.toThrow();
+    expect(() => Persist.get('errorKey')).not.toThrow();
     expect(logger.log).toHaveBeenCalledWith('get:error', expect.any(Error));
   });
 
   it('verifies that non-serializable values are not stored', () => {
-    const { set, get } = persist();
     const testFunction = () => {};
-    set('functionKey', testFunction);
-    expect(get('functionKey')).toBeNull();
+    Persist.set('functionKey', testFunction);
+    expect(Persist.get('functionKey')).toBeNull();
   });
 
   it('ensure key prefixing works correctly', () => {
-    const { set } = persist();
     const testKey = 'prefixedKey';
     const testData = { c: 3 };
 
-    set(testKey, testData);
+    Persist.set(testKey, testData);
 
     expect(window.localStorage.setItem).toHaveBeenCalledWith(
       `${UTILITY_NAME}:${testKey}`,
