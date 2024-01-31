@@ -1,6 +1,6 @@
-import { getSearchParams } from './get-search-params';
+import { SearchParams } from './search-params';
 
-describe('getSearchParams', () => {
+describe('SearchParams', () => {
   beforeAll(() => {
     jest.spyOn(window, 'location', 'get').mockReturnValue({
       search: '?param1=value1&param2=value2'
@@ -8,13 +8,11 @@ describe('getSearchParams', () => {
   });
 
   it('return the correct value for a given query parameter', () => {
-    const { get } = getSearchParams();
-    expect(get('param1')).toBe('value1');
+    expect(SearchParams.get('param1')).toBe('value1');
   });
 
   it('return null for a non-existent query parameter', () => {
-    const { get } = getSearchParams();
-    expect(get('nonExistentParam')).toBeNull();
+    expect(SearchParams.get('nonExistentParam')).toBeNull();
   });
 
   afterAll(() => {

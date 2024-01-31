@@ -1,14 +1,13 @@
 import { useNavigate } from '@tanstack/react-router';
 
 import { Authentication } from '@modules/authentication/authentication';
-import { getSearchParams } from '@utilities/get-search-params';
+import { SearchParams } from '@utilities/search-params';
 
 import { logger } from './constants';
 
 export const useAuthCallbackHandler = (engine: Authentication | undefined) => {
   const navigate = useNavigate();
-  const { get } = getSearchParams();
-  const redirect = get('redirect');
+  const redirect = SearchParams.get('redirect');
 
   const signIn = async () => {
     try {

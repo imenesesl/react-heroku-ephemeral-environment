@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { act, renderHook } from '@testing-library/react-hooks';
 
 import { Authentication } from '@modules/authentication/authentication';
-import { getSearchParams } from '@utilities/get-search-params';
+import { SearchParams } from '@utilities/search-params';
 
 import { logger } from './constants';
 import { useAuthCallbackHandler } from './useAuthCallbackHandler';
@@ -11,8 +11,8 @@ jest.mock('@tanstack/react-router', () => ({
   useNavigate: jest.fn()
 }));
 
-jest.mock('@utilities/get-search-params', () => ({
-  getSearchParams: jest.fn(() => ({ get: jest.fn() }))
+jest.mock('@utilities/search-params', () => ({
+  SearchParams: { get: jest.fn() }
 }));
 
 jest.mock('./constants', () => ({
@@ -31,9 +31,7 @@ describe('useAuthCallbackHandler', () => {
     const AuthenticationMock = { signIn: mockSignIn };
     const mockNavigate = jest.fn();
     (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
-    (getSearchParams as jest.Mock).mockReturnValue({
-      get: () => '/custom/redirect'
-    });
+    (SearchParams.get as jest.Mock).mockReturnValue('/custom/redirect');
 
     const { result } = renderHook(() =>
       useAuthCallbackHandler(AuthenticationMock as unknown as Authentication)
@@ -53,9 +51,7 @@ describe('useAuthCallbackHandler', () => {
     const AuthenticationMock = { signIn: mockSignIn };
     const mockNavigate = jest.fn();
     (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
-    (getSearchParams as jest.Mock).mockReturnValue({
-      get: () => null
-    });
+    (SearchParams.get as jest.Mock).mockReturnValue(null);
 
     const { result } = renderHook(() =>
       useAuthCallbackHandler(AuthenticationMock as unknown as Authentication)
@@ -91,9 +87,7 @@ describe('useAuthCallbackHandler', () => {
     const AuthenticationMock = { signUp: mockSignUp };
     const mockNavigate = jest.fn();
     (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
-    (getSearchParams as jest.Mock).mockReturnValue({
-      get: () => '/custom/redirect'
-    });
+    (SearchParams.get as jest.Mock).mockReturnValue('/custom/redirect');
 
     const { result } = renderHook(() =>
       useAuthCallbackHandler(AuthenticationMock as unknown as Authentication)
@@ -113,9 +107,7 @@ describe('useAuthCallbackHandler', () => {
     const AuthenticationMock = { signUp: mockSignUp };
     const mockNavigate = jest.fn();
     (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
-    (getSearchParams as jest.Mock).mockReturnValue({
-      get: () => null
-    });
+    (SearchParams.get as jest.Mock).mockReturnValue(null);
 
     const { result } = renderHook(() =>
       useAuthCallbackHandler(AuthenticationMock as unknown as Authentication)

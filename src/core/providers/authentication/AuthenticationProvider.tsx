@@ -1,15 +1,13 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 
 import { onAuthStateChanged } from '@modules/firebase';
-import { persist } from '@utilities/persist';
+import { Persist } from '@utilities/persist';
 
 import { authenticationContext } from './context';
 import { AuthenticationContextProps } from './types';
 
-const { set, get } = persist();
-
 export const AuthenticationProvider = ({ children }: PropsWithChildren) => {
-  const userCached = get('user');
+  const userCached = Persist.get<AuthenticationContextProps>('user');
   const [user, seUser] = useState<AuthenticationContextProps>(userCached);
 
   useEffect(() => {
@@ -21,7 +19,7 @@ export const AuthenticationProvider = ({ children }: PropsWithChildren) => {
         const name = displayName ?? '';
         const newUser = { name, uid };
         seUser(newUser);
-        set('user', newUser);
+        Persist.set('user', newUser);
       }
     });
     return () => subscription();
