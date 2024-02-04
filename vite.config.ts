@@ -20,7 +20,8 @@ export default defineConfig({
       '@pages': path.resolve(__dirname, 'src/pages'),
       '@assets': path.resolve(__dirname, 'src/assets'),
       '@root': path.resolve(__dirname, 'src'),
-      '@locales': path.resolve(__dirname, 'src/locales')
+      '@locales': path.resolve(__dirname, 'src/locales'),
+      '@stories': path.resolve(__dirname, 'src/stories')
     }
   },
   plugins: [

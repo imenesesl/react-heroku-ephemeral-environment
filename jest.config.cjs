@@ -30,7 +30,8 @@ module.exports = {
     'src/main.tsx',
     'src/components/icons/brands.tsx',
     'src/locales/',
-    'src/core/providers/router'
+    'src/core/providers/router',
+    '/src/stories/'
   ],
   testPathIgnorePatterns: [
     '/node_modules/',

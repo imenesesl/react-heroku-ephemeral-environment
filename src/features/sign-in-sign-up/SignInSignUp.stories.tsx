@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { withStoryProviders } from '@stories/decorators';
+
 import { SignInSignUp } from './SignInSignUp';
 
 const meta = {
@@ -25,6 +27,10 @@ export const SignIn: Story = {
       googleLabel: 'Sign in with Google',
       facebookLabel: 'Sign in with Facebook'
     }
+  },
+  render: (args) => {
+    const Component = withStoryProviders(SignInSignUp, args);
+    return <Component />;
   }
 };
 
@@ -37,5 +43,9 @@ export const SignUp: Story = {
       googleLabel: 'Sign up with Google',
       facebookLabel: 'Sign up with Facebook'
     }
+  },
+  render: (args) => {
+    const Component = withStoryProviders(SignInSignUp, args);
+    return <Component />;
   }
 };
