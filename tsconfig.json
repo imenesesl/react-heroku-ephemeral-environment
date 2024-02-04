@@ -14,7 +14,8 @@
       "@utilities/*": ["./src/utilities/*"],
       "@core/*": ["./src/core/*"],
       "@mocks/*": ["./src/__mocks__/*"],
-      "@root/*": ["./src/*"]
+      "@root/*": ["./src/*"],
+      "@stories/*": ["./src/stories/*"]
     },
 
     "types": ["node", "jest", "@testing-library/jest-dom"],
