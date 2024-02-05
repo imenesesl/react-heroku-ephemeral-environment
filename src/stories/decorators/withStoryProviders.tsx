@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 
 import {
   createFileRoute,
   createRouter,
   Outlet,
   RootRoute,
-  RouterProvider
+  RouterProvider as RouterP
 } from '@tanstack/react-router';
 
-import { records } from '@locales/records';
-import { I18nProvider } from '@modules/i18n';
+import { AppProvider } from '@core/providers/app';
 
 export const withStoryProviders = (Story: FC<any>, context: any) => {
   const rootRoute = new RootRoute({
@@ -27,16 +26,18 @@ export const withStoryProviders = (Story: FC<any>, context: any) => {
   } as any);
 
   const routeTree = rootRoute.addChildren([Route]);
-
   const router = createRouter({ routeTree, defaultPreload: 'intent' });
+  const RouterProvider = RouterP as unknown as FC<
+    PropsWithChildren<{ router: typeof router }>
+  >;
+
   return () => {
-    const RouterP: any = RouterProvider;
     return (
-      <RouterP router={router}>
-        <I18nProvider records={records}>
+      <AppProvider>
+        <RouterProvider router={router}>
           <Story {...context} />
-        </I18nProvider>
-      </RouterP>
+        </RouterProvider>
+      </AppProvider>
     );
   };
 };

@@ -5,7 +5,7 @@ import { Redirect } from '@utilities/redirect';
 
 export const Route = createFileRoute('/signin')({
   beforeLoad: ({ context }) => {
-    Redirect.inject(context).redirectTo('/me/home');
+    Redirect.inject({ context }).redirectTo('/me/home');
   },
   component: SignIn
 });
