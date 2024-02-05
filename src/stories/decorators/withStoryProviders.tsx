@@ -9,15 +9,15 @@ import {
   RouterProvider as RouterP
 } from '@tanstack/react-router';
 
-import { AppProvider } from '@core/providers/app';
+import { AppStoriesProvider } from './AppStoriesProvider';
 
-export const withStoryProviders = (Story: FC<any>, context: any) => {
+export const withStoryProviders = (Story: FC<any>, args: any) => {
   const rootRoute = new RootRoute({
     component: Outlet
   });
 
   const Import = createFileRoute('/*')({
-    component: () => <Story {...context} />
+    component: () => <Story {...args} />
   });
 
   const Route = Import.update({
@@ -33,11 +33,11 @@ export const withStoryProviders = (Story: FC<any>, context: any) => {
 
   return () => {
     return (
-      <AppProvider>
+      <AppStoriesProvider>
         <RouterProvider router={router}>
-          <Story {...context} />
+          <Story {...args} />
         </RouterProvider>
-      </AppProvider>
+      </AppStoriesProvider>
     );
   };
 };
